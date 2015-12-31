@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6AC6FEE5-3633-4E9E-926F-840CB0F24D7D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DjangoSharp</RootNamespace>
+    <AssemblyName>DjangoSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.022\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <None Include="Properties\PublishProfiles\Seferino.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="API.cs" />
+    <Compile Include="DateTimeField.cs" />
+    <Compile Include="CharField.cs" />
+    <Compile Include="Django.cs" />
+    <Compile Include="Error\InvalidStructure.cs" />
+    <Compile Include="Field.cs" />
+    <Compile Include="Field\BaseField.cs" />
+    <Compile Include="Field\BooleanField.cs" />
+    <Compile Include="Field\CharField.cs" />
+    <Compile Include="Field\DateTimeField.cs" />
+    <Compile Include="Field\ForeignKeyTyped.cs" />
+    <Compile Include="Field\NumberField.cs" />
+    <Compile Include="Field\Field.cs" />
+    <Compile Include="Field\ForeignKey.cs" />
+    <Compile Include="Field\IAttributeField.cs" />
+    <Compile Include="Field\IField.cs" />
+    <Compile Include="Field\IForeignKey.cs" />
+    <Compile Include="Field\IListField.cs" />
+    <Compile Include="Field\IMultipleValueField.cs" />
+    <Compile Include="Field\IntegerField.cs" />
+    <Compile Include="Field\IOneToOneField.cs" />
+    <Compile Include="Field\IRefField.cs" />
+    <Compile Include="Field\ListField.cs" />
+    <Compile Include="Field\ManyToManyField.cs" />
+    <Compile Include="Field\OneToOneField.cs" />
+    <Compile Include="Field\TimestampField.cs" />
+    <Compile Include="FilterOperator.cs" />
+    <Compile Include="ForeignKey.cs" />
+    <Compile Include="GroupOperator.cs" />
+    <Compile Include="IConnection.cs" />
+    <Compile Include="IModel.cs" />
+    <Compile Include="BooleanField.cs" />
+    <Compile Include="IntegerField.cs" />
+    <Compile Include="ListField.cs" />
+    <Compile Include="ManyToManyField.cs" />
+    <Compile Include="Meta.cs" />
+    <Compile Include="DjangoModel.cs" />
+    <Compile Include="Model\AStructure.cs" />
+    <Compile Include="Model\Meta.cs" />
+    <Compile Include="Model\ModelStructure.cs" />
+    <Compile Include="Model\VirtualStructure.cs" />
+    <Compile Include="NumberField.cs" />
+    <Compile Include="OneToOneField.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\DML.cs" />
+    <Compile Include="Query\FieldFilter.cs" />
+    <Compile Include="Query\OrderBy.cs" />
+    <Compile Include="Query\Path.cs" />
+    <Compile Include="Query\FunctionResult.cs" />
+    <Compile Include="Query\Filter.cs" />
+    <Compile Include="Query\SqlQuery.cs" />
+    <Compile Include="TimeStampField.cs" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>63591</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:63591/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

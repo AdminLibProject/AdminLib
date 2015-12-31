@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8CCE3667-718F-408A-9B37-FC0F5775D363}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AdminLib</RootNamespace>
+    <AssemblyName>AdminLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.022\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <None Include="Properties\PublishProfiles\Seferino.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\ApplicationParameter.cs" />
+    <Compile Include="Application\Error\ParameterNotFound.cs" />
+    <Compile Include="auth\Error\DisabledAccount.cs" />
+    <Compile Include="auth\Error\InvalidPassword.cs" />
+    <Compile Include="auth\Error\InvalidPasswordFormat.cs" />
+    <Compile Include="auth\Error\InvalidUser.cs" />
+    <Compile Include="auth\Error\SessionDontExists.cs" />
+    <Compile Include="auth\Session.cs" />
+    <Compile Include="auth\User.cs" />
+    <Compile Include="Application\Config.cs" />
+    <Compile Include="Database\Error\SuccessWithCompilationError.cs" />
+    <Compile Include="Database\Error\UniqueConstraintViolated.cs" />
+    <Compile Include="Http\BaseController.cs" />
+    <Compile Include="Database\BaseCursor.cs" />
+    <Compile Include="Database\Cursor.cs" />
+    <Compile Include="Database\CursorResult.cs" />
+    <Compile Include="Database\AdminConnection.cs" />
+    <Compile Include="Database\Error\Code.cs" />
+    <Compile Include="Database\Error\DependencyError.cs" />
+    <Compile Include="Database\Error\DisabledAccount.cs" />
+    <Compile Include="Database\Error\DuplicateKey.cs" />
+    <Compile Include="Database\Error\InsufficientPrivileges.cs" />
+    <Compile Include="Database\Error\InvalidData.cs" />
+    <Compile Include="Database\Error\InvalidID.cs" />
+    <Compile Include="Database\Error\InvalidIdentifier.cs" />
+    <Compile Include="Database\Error\InvalidPassword.cs" />
+    <Compile Include="Database\Error\QueryException.cs" />
+    <Compile Include="Database\Error\SessionDontExists.cs" />
+    <Compile Include="Database\ISqlQuery.cs" />
+    <Compile Include="Debug\Connection.cs" />
+    <Compile Include="Debug\Controller.cs" />
+    <Compile Include="Debug\Cursor.cs" />
+    <Compile Include="Debug\Debug.cs" />
+    <Compile Include="Debug\DebugObject.cs" />
+    <Compile Include="Debug\HttpParameter.cs" />
+    <Compile Include="Debug\HttpRequest.cs" />
+    <Compile Include="Debug\HttpSession.cs" />
+    <Compile Include="Debug\Log.cs" />
+    <Compile Include="Debug\Session.cs" />
+    <Compile Include="Debug\SqlQuery.cs" />
+    <Compile Include="Debug\Timer.cs" />
+    <Compile Include="Debug\User.cs" />
+    <Compile Include="Http\ModelController.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Model\IAdminQueryResult.cs" />
+    <Compile Include="Model\ModelList.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DjangoSharp\DjangoSharp.csproj">
+      <Project>{6ac6fee5-3633-4e9e-926f-840cb0f24d7d}</Project>
+      <Name>DjangoSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>63787</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:63787/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
