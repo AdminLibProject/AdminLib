@@ -1,0 +1,7 @@
+*.dll
+*.suo
+server/.vs/*
+server/AdminLib/obj/*
+server/AdminLib/bin/*
+server/DjangoSharp/bin/*
+server/DjangoSharp/obj/*
