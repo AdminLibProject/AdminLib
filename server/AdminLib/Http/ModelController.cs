@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net.Http;
-using DjangoSharp;
-using DjangoSharp.Model;
-using DjangoSharp.Query;
+using AdminLib.Model.Model;
+using AdminLib.Model.Query;
 using AdminLib.Model;
 using db=AdminLib.Database;
 using Oracle.ManagedDataAccess.Client;
@@ -94,7 +93,7 @@ namespace AdminLib.Http {
             if (this.GetModel().primaryKeys.Length != 1)
                 return this.InternalServerError("The primary key is not usable for returning an object");
 
-            if (!(this.GetModel().primaryKeys[0] is DjangoSharp.Field.IntegerField))
+            if (!(this.GetModel().primaryKeys[0] is AdminLib.Model.Field.IntegerField))
                 return this.InternalServerError("The primary key is not usable for returning an object");
 
             primaryKey = this.GetModel().GetPrimaryKeyValue(item);

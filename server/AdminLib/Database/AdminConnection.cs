@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using DjangoSharp;
+using AdminLib.Model;
 using System.Configuration;
 using AdminLib.Application;
 
@@ -13,7 +13,7 @@ namespace AdminLib.Database {
 
     using Timer = Debug.Timer;
 
-    public class AdminConnection : DjangoSharp.IConnection {
+    public class AdminConnection : AdminLib.Model.IConnection {
 
         /******************** Static Attributes ********************/
         private static int                  lastID = 0;
@@ -221,7 +221,7 @@ namespace AdminLib.Database {
         /// <param name="parameters"></param>
         /// <param name="commit">If null, the commit will be done if the autocommit is enabled</param>
         /// <returns></returns>
-        public DjangoSharp.Query.FunctionResult ExecuteFunction ( string                     function
+        public AdminLib.Model.Query.FunctionResult ExecuteFunction ( string                     function
                                                                 , Dictionary<string, object> parameters
                                                                 , bool?                      commit = null) {
 
@@ -258,14 +258,14 @@ namespace AdminLib.Database {
         /// <param name="function">Function to execute</param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public DjangoSharp.Query.FunctionResult ExecuteFunction ( string            function
+        public AdminLib.Model.Query.FunctionResult ExecuteFunction ( string            function
                                                                 , OracleParameter[] parameters = null
                                                                 , bool              bindByName = true
                                                                 , bool?             commit     = null) {
 
             FunctionResult[] queryResults;
             string           sqlQuery;
-            DjangoSharp.Query.FunctionResult result;
+            AdminLib.Model.Query.FunctionResult result;
 
             sqlQuery = "SELECT TO_CHAR(" + function + ") AS string_value FROM DUAL";
 
@@ -273,7 +273,7 @@ namespace AdminLib.Database {
                                                  , parameters : parameters
                                                  , bindByName : bindByName);
 
-            result = new DjangoSharp.Query.FunctionResult(queryResults[0].STRING_VALUE);
+            result = new AdminLib.Model.Query.FunctionResult(queryResults[0].STRING_VALUE);
 
             if (commit == true || (commit == null && this.autoCommit))
                 this.Commit();

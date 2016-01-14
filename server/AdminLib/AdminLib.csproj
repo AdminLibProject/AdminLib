@@ -121,15 +121,60 @@
     <Compile Include="Debug\User.cs" />
     <Compile Include="Http\ModelController.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Model\API.cs" />
+    <Compile Include="Model\BooleanField.cs" />
+    <Compile Include="Model\CharField.cs" />
+    <Compile Include="Model\DateTimeField.cs" />
+    <Compile Include="Model\Django.cs" />
+    <Compile Include="Model\DjangoModel.cs" />
+    <Compile Include="Model\Error\InvalidStructure.cs" />
+    <Compile Include="Model\Field.cs" />
+    <Compile Include="Model\Field\BaseField.cs" />
+    <Compile Include="Model\Field\BooleanField.cs" />
+    <Compile Include="Model\Field\CharField.cs" />
+    <Compile Include="Model\Field\DateTimeField.cs" />
+    <Compile Include="Model\Field\Field.cs" />
+    <Compile Include="Model\Field\ForeignKey.cs" />
+    <Compile Include="Model\Field\ForeignKeyTyped.cs" />
+    <Compile Include="Model\Field\IAttributeField.cs" />
+    <Compile Include="Model\Field\IField.cs" />
+    <Compile Include="Model\Field\IForeignKey.cs" />
+    <Compile Include="Model\Field\IListField.cs" />
+    <Compile Include="Model\Field\IMultipleValueField.cs" />
+    <Compile Include="Model\Field\IntegerField.cs" />
+    <Compile Include="Model\Field\IOneToOneField.cs" />
+    <Compile Include="Model\Field\IRefField.cs" />
+    <Compile Include="Model\Field\ListField.cs" />
+    <Compile Include="Model\Field\ManyToManyField.cs" />
+    <Compile Include="Model\Field\NumberField.cs" />
+    <Compile Include="Model\Field\OneToOneField.cs" />
+    <Compile Include="Model\Field\TimestampField.cs" />
+    <Compile Include="Model\FilterOperator.cs" />
+    <Compile Include="Model\ForeignKey.cs" />
+    <Compile Include="Model\GroupOperator.cs" />
     <Compile Include="Model\IAdminQueryResult.cs" />
+    <Compile Include="Model\IConnection.cs" />
+    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\IntegerField.cs" />
+    <Compile Include="Model\ListField.cs" />
+    <Compile Include="Model\ManyToManyField.cs" />
+    <Compile Include="Model\Meta.cs" />
     <Compile Include="Model\ModelList.cs" />
+    <Compile Include="Model\Model\AStructure.cs" />
+    <Compile Include="Model\Model\Meta.cs" />
+    <Compile Include="Model\Model\ModelStructure.cs" />
+    <Compile Include="Model\Model\VirtualStructure.cs" />
+    <Compile Include="Model\NumberField.cs" />
+    <Compile Include="Model\OneToOneField.cs" />
+    <Compile Include="Model\Query\DML.cs" />
+    <Compile Include="Model\Query\FieldFilter.cs" />
+    <Compile Include="Model\Query\Filter.cs" />
+    <Compile Include="Model\Query\FunctionResult.cs" />
+    <Compile Include="Model\Query\OrderBy.cs" />
+    <Compile Include="Model\Query\Path.cs" />
+    <Compile Include="Model\Query\SqlQuery.cs" />
+    <Compile Include="Model\TimeStampField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DjangoSharp\DjangoSharp.csproj">
-      <Project>{6ac6fee5-3633-4e9e-926f-840cb0f24d7d}</Project>
-      <Name>DjangoSharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

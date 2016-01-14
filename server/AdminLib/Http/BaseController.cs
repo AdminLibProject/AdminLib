@@ -7,12 +7,11 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using Oracle.ManagedDataAccess.Client;
 using System.Web;
-using DjangoSharp;
-using DjangoSharp.Model;
-using DjangoSharp.Query;
+using AdminLib.Model;
+using AdminLib.Model.Model;
+using AdminLib.Model.Query;
 using db = AdminLib.Database;
 
-using AdminLib.Model;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.IO;
