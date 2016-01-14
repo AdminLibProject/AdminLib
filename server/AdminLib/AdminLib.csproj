@@ -120,15 +120,12 @@
     <Compile Include="Debug\Timer.cs" />
     <Compile Include="Debug\User.cs" />
     <Compile Include="Http\ModelController.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="Model\API.cs" />
     <Compile Include="Model\BooleanField.cs" />
     <Compile Include="Model\CharField.cs" />
     <Compile Include="Model\DateTimeField.cs" />
-    <Compile Include="Model\Django.cs" />
-    <Compile Include="Model\DjangoModel.cs" />
+    <Compile Include="Model\Model.cs" />
     <Compile Include="Model\Error\InvalidStructure.cs" />
-    <Compile Include="Model\Field.cs" />
     <Compile Include="Model\Field\BaseField.cs" />
     <Compile Include="Model\Field\BooleanField.cs" />
     <Compile Include="Model\Field\CharField.cs" />
@@ -154,6 +151,7 @@
     <Compile Include="Model\GroupOperator.cs" />
     <Compile Include="Model\IAdminQueryResult.cs" />
     <Compile Include="Model\IConnection.cs" />
+    <Compile Include="Model\IDataHandler.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\IntegerField.cs" />
     <Compile Include="Model\ListField.cs" />

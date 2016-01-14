@@ -11,5 +11,6 @@ namespace AdminLib.Model {
         void Remove<Model>(IConnection connection, Model item, string path=null);
         void Update       (IConnection connection, string[] fields=null, string[] emptyFields=null);
         void Delete       (IConnection connection);
+
     }
 }

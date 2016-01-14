@@ -1,24 +1,24 @@
 ﻿using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Web;
 
-namespace AdminLib.Model {
-    public abstract class DjangoModel<Self> : IModel
-        where Self : DjangoModel<Self> {
+namespace AdminLib.Model
+{
+    public abstract class Model<Self> : IModel, IAdminQueryResult
+        where Self : Model<Self> {
 
         /******************** Static attributes ********************/
         public static ModelStructure structure;
 
         /******************** Attributes ********************/
+        public Debug.Debug  debug   { get; set;}
+        public string       message { get; set; }
+
+        /******************** Fields ********************/
+
         private AStructure model {
             get{
-                return DjangoModel<Self>.structure;
+                return Model<Self>.structure;
             }
         }
 
@@ -61,12 +61,12 @@ namespace AdminLib.Model {
         }
 
         public static ModelStructure Initialize() {
-            DjangoModel<Self>.structure = new ModelStructure(typeof(Self));
+            Model<Self>.structure = new ModelStructure(typeof(Self));
 
-            if (DjangoModel<Self>.structure.primaryKeys.Length != 1)
+            if (Model<Self>.structure.primaryKeys.Length != 1)
                 throw new Exception("The model have an incorrect number of primary keys");
 
-            return DjangoModel<Self>.structure;
+            return Model<Self>.structure;
         }
 
         public static ModelStructure GetModelStructure() {
@@ -77,7 +77,7 @@ namespace AdminLib.Model {
 
             SqlQuery sqlQuery;
 
-            sqlQuery = new SqlQuery ( model   : DjangoModel<Self>.structure
+            sqlQuery = new SqlQuery ( model   : Model<Self>.structure
                                     , fields  : fields
                                     , filter  : filter
                                     , sorting : orderBy);
@@ -87,7 +87,7 @@ namespace AdminLib.Model {
 
         public static Self QueryItem(IConnection connection, int id, string[] fields) {
 
-            return (Self) DjangoModel<Self>.QueryItem ( connection : connection
+            return (Self) Model<Self>.QueryItem ( connection : connection
                                                       , id         : id
                                                       , fields     : fields);
 
@@ -109,7 +109,7 @@ namespace AdminLib.Model {
             Object[] items;
             Self[]   results;
 
-            items = DjangoModel<Self>.structure.QueryItems ( connection : connection
+            items = Model<Self>.structure.QueryItems ( connection : connection
                                                            , filter     : filter
                                                            , fields     : fields
                                                            , orderBy    : orderBy);
@@ -167,7 +167,7 @@ namespace AdminLib.Model {
 
         public virtual void Delete(IConnection connection) {
             DML.Delete ( connection : connection
-                       , model      : DjangoModel<Self>.structure
+                       , model      : Model<Self>.structure
                        , instance   : this);
         }
 
@@ -188,7 +188,7 @@ namespace AdminLib.Model {
         public virtual void Update(IConnection connection, string[] fields=null, string[] emptyFields=null) {
 
             DML.Update ( connection   : connection
-                       , model       : DjangoModel<Self>.structure
+                       , model       : Model<Self>.structure
                        , instance    : this
                        , fields      : fields
                        , emptyFields : emptyFields);
