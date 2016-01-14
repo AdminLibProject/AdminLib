@@ -2,12 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AdminLib.Model.Query;
 
-namespace AdminLib.Model {
+namespace AdminLib.Model.Interface {
     public interface IConnection {
 
         DataTable QueryDataTable ( string            sqlQuery

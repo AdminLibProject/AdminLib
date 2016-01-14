@@ -5,11 +5,12 @@ using AdminLib.Model.Query;
 using AdminLib.Model;
 using db=AdminLib.Database;
 using Oracle.ManagedDataAccess.Client;
+using AdminLib.Model.Interface;
 
 namespace AdminLib.Http {
 
     public class ModelController<Model> : BaseController
-        where Model: IModel, IAdminQueryResult, new() {
+        where Model: IModel, IQueryResult, new() {
 
         /****************** Attributes ******************/
         public static ModelStructure model {
@@ -175,7 +176,7 @@ namespace AdminLib.Http {
             if (item == null)
                 return this.NotFound();
             else
-                return this.response(data : (IAdminQueryResult) item);
+                return this.response(data : (IQueryResult) item);
         }
 
         public virtual HttpResponseMessage GetItems() {

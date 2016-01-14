@@ -13,7 +13,7 @@ namespace AdminLib.Database {
 
     using Timer = Debug.Timer;
 
-    public class AdminConnection : AdminLib.Model.IConnection {
+    public class AdminConnection : AdminLib.Model.Interface.IConnection {
 
         /******************** Static Attributes ********************/
         private static int                  lastID = 0;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using AdminLib.Model.Model;
 using AdminLib.Model.Field;
+using AdminLib.Model.Interface;
 
 namespace AdminLib.Model.Query {
 

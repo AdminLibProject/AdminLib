@@ -1,10 +1,10 @@
 ﻿using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using System;
+using AdminLib.Model.Interface;
 
-namespace AdminLib.Model
-{
-    public abstract class Model<Self> : IModel, IAdminQueryResult
+namespace AdminLib.Model {
+    public abstract class Model<Self> : IModel, IQueryResult
         where Self : Model<Self> {
 
         /******************** Static attributes ********************/

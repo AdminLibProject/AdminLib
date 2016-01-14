@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AdminLib.Model.Field;
-using AdminLib.Model.Query;
+using AdminLib.Model.Interface;
 
 namespace AdminLib.Model.Model {
 

@@ -149,15 +149,14 @@
     <Compile Include="Model\FilterOperator.cs" />
     <Compile Include="Model\ForeignKey.cs" />
     <Compile Include="Model\GroupOperator.cs" />
-    <Compile Include="Model\IAdminQueryResult.cs" />
-    <Compile Include="Model\IConnection.cs" />
-    <Compile Include="Model\IDataHandler.cs" />
-    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Interface\IQueryResult.cs" />
+    <Compile Include="Model\Interface\IConnection.cs" />
+    <Compile Include="Model\Interface\IDataHandler.cs" />
+    <Compile Include="Model\Interface\IModel.cs" />
     <Compile Include="Model\IntegerField.cs" />
     <Compile Include="Model\ListField.cs" />
     <Compile Include="Model\ManyToManyField.cs" />
     <Compile Include="Model\Meta.cs" />
-    <Compile Include="Model\ModelList.cs" />
     <Compile Include="Model\Model\AStructure.cs" />
     <Compile Include="Model\Model\Meta.cs" />
     <Compile Include="Model\Model\ModelStructure.cs" />
@@ -174,6 +173,7 @@
     <Compile Include="Model\TimeStampField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

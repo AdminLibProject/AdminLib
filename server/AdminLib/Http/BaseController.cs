@@ -16,6 +16,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.IO;
 using AdminLib.Application;
+using AdminLib.Model.Interface;
 
 namespace AdminLib.Http {
     public abstract class BaseController : ApiController {
@@ -211,12 +212,12 @@ namespace AdminLib.Http {
         private MultipartFormDataStreamProvider provider;
 
         /******************** Structures ********************/
-        public struct EmptyResponse : IAdminQueryResult {
+        public struct EmptyResponse : IQueryResult {
             public Debug.Debug debug   { get; set; }
             public string      message { get; set; }
         }
 
-        public class Error<T> : IAdminQueryResult
+        public class Error<T> : IQueryResult
             where T: Exception {
 
             /***** Attributes *****/
@@ -258,6 +259,59 @@ namespace AdminLib.Http {
                 this.entryName = this.entryName.Substring(1, this.entryName.Length - 2);
                 this.filename  = this.filename.Substring(1, this.filename.Length - 2);
 
+            }
+
+        }
+
+        /// <summary>
+        ///     Will contain the list of items that will be returned by the controller.
+        /// </summary>
+        /// <typeparam name="Model"></typeparam>
+        public class ModelList<Model>  : IQueryResult {
+
+            /***** Attributes *****/
+            public Model[] list   { get; private set; }
+            public Cursor  cursor { get; private set; }
+
+            public Debug.Debug debug   { get; set; }
+            public string      message { get; set; }
+
+            /***** Structure *****/
+            public struct Cursor {
+
+                /* Attributes */
+                public int  id;
+                public bool open;
+
+                /* Constructors */
+                public Cursor(db.CursorResult<Model> cursor) {
+                    this.id   = cursor.id;
+                    this.open = cursor.IsOpen;
+                }
+
+            }
+
+            /***** Constructors *****/
+            public ModelList(Model[] list) {
+                this.list   = list;
+            }
+
+            public ModelList(Object[] list) {
+
+                List<Model> listModel;
+
+                listModel = new List<Model>();
+
+                foreach (Object element in list) {
+                    listModel.Add((Model) element);
+                }
+
+                this.list = listModel.ToArray();
+            }
+
+            public ModelList(db.CursorResult<Model> cursor) {
+                this.list = cursor.items;
+                this.cursor = new Cursor(cursor);
             }
 
         }
@@ -595,7 +649,9 @@ namespace AdminLib.Http {
             return this.response ( statusCode : HttpStatusCode.BadRequest);
         }
 
-        protected virtual HttpResponseMessage response<T>(T[] list, HttpStatusCode statusCode=HttpStatusCode.OK, string message=null) {
+        protected virtual HttpResponseMessage response<T> ( T[] list
+                                                          , HttpStatusCode statusCode=HttpStatusCode.OK
+                                                          , string message=null) {
 
             ModelList<T> data;
 
@@ -612,10 +668,10 @@ namespace AdminLib.Http {
         /// </summary>
         /// <returns></returns>
         protected virtual HttpResponseMessage response<T> (T data, HttpStatusCode statusCode=HttpStatusCode.OK, string message=null)
-            where T: Model.IAdminQueryResult {
+            where T: IQueryResult {
 
             HttpResponseMessage response;
-            Model.IAdminQueryResult queryResult;
+            IQueryResult        queryResult;
 
             this.debug.startTimer("AdminHttpController.response");
 
@@ -682,7 +738,7 @@ namespace AdminLib.Http {
         }
 
         protected HttpResponseMessage Ok<T>(T data, string message = null)
-        where T: Model.IAdminQueryResult {
+        where T: IQueryResult {
 
             return this.response ( data       : data
                                  , statusCode : HttpStatusCode.OK

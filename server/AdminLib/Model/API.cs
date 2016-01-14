@@ -6,7 +6,7 @@ using AdminLib.Model.Query;
 using AdminLib.Model.Model;
 
 namespace AdminLib.Model {
-    public static class API {
+    internal static class API {
 
         /******************** Methods ********************/
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using AdminLib.Model.Interface;
 
 namespace AdminLib.Model.Query {
     internal static class DML {
