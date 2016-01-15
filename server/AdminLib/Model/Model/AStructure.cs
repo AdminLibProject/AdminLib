@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using AdminLib.Model.Query;
 using System.Collections;
 using System.Reflection;
-using AdminLib.Data.Adapter;
+using AdminLib.Data.Store.Adapter;
 
 namespace AdminLib.Model.Model {
 

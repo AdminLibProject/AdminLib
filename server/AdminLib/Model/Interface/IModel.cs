@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace AdminLib.Data.Adapter {
+namespace AdminLib.Data.Store.Adapter {
     public interface IModel {
 
         void Add<Model>   (IAdapter connection, Model item, string path=null);

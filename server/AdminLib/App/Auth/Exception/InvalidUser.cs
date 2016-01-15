@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace AdminLib.Data.Store.Adapter {
-    public interface IDataHandler {
+namespace AdminLib.App.Auth.Exception
+{
+    public class InvalidUser : System.Exception {
     }
 }

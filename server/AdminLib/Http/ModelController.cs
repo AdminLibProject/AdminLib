@@ -3,10 +3,10 @@ using System.Net.Http;
 using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using AdminLib.Model;
-using db = AdminLib.Database;
-using AdminLib.Data.Adapter;
+using db = AdminLib.Data.Query;
+using AdminLib.Data.Store.Adapter;
 using AdminLib.Model.Interface;
-using AdminLib.Database.Error;
+using AdminLib.Data.Query.Exception;
 
 namespace AdminLib.Http {
 
@@ -188,7 +188,7 @@ namespace AdminLib.Http {
             try {
                 items     = this.QueryItems();
             }
-            catch (AdminLib.Database.Error.QueryException exception) {
+            catch (AdminLib.Data.Query.Exception.QueryException exception) {
                 return this.InternalServerError(exception);
             }
             catch (Exception exception) {

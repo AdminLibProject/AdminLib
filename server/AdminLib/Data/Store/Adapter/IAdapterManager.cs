@@ -4,6 +4,11 @@ using System.Linq;
 using System.Web;
 
 namespace AdminLib.Data.Store.Adapter {
-    public interface IDataHandler {
+
+    public interface IAdapterManager {
+
+        IAdapter GetNewAdapter(bool autoCommit);
+
     }
+
 }

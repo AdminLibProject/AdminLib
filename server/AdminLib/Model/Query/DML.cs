@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using AdminLib.Data.Adapter;
-using AdminLib.Database;
+using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model.Query
 {

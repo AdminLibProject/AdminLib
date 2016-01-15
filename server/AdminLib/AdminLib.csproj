@@ -77,39 +77,39 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\ApplicationParameter.cs" />
-    <Compile Include="Application\Error\ParameterNotFound.cs" />
-    <Compile Include="auth\Error\DisabledAccount.cs" />
-    <Compile Include="auth\Error\InvalidPassword.cs" />
-    <Compile Include="auth\Error\InvalidPasswordFormat.cs" />
-    <Compile Include="auth\Error\InvalidUser.cs" />
-    <Compile Include="auth\Error\SessionDontExists.cs" />
-    <Compile Include="auth\Session.cs" />
-    <Compile Include="auth\User.cs" />
-    <Compile Include="Application\Config.cs" />
-    <Compile Include="Database\Error\InvalidData.cs" />
-    <Compile Include="Database\Error\InvalidID.cs" />
-    <Compile Include="Database\Error\UniqueConstraintViolated.cs" />
-    <Compile Include="Data\Adapter\Oracle\Exception\AdapterException.cs" />
-    <Compile Include="Data\Adapter\Oracle\Exception\SuccessWithCompilationError.cs" />
-    <Compile Include="Database\QueryParameter.cs" />
-    <Compile Include="Data\Adapter\IAdapterManager.cs" />
-    <Compile Include="Data\Adapter\Oracle\Adapter.cs" />
-    <Compile Include="Data\Adapter\Oracle\Cursor.cs" />
+    <Compile Include="App\ApplicationParameter.cs" />
+    <Compile Include="App\Error\ParameterNotFound.cs" />
+    <Compile Include="App\Auth\Exception\DisabledAccount.cs" />
+    <Compile Include="App\Auth\Exception\InvalidPassword.cs" />
+    <Compile Include="App\Auth\Exception\InvalidPasswordFormat.cs" />
+    <Compile Include="App\Auth\Exception\InvalidUser.cs" />
+    <Compile Include="App\Auth\Exception\SessionDontExists.cs" />
+    <Compile Include="App\Auth\Session.cs" />
+    <Compile Include="App\Auth\User.cs" />
+    <Compile Include="App\Config.cs" />
+    <Compile Include="Data\Query\Exception\InvalidData.cs" />
+    <Compile Include="Data\Query\Exception\InvalidID.cs" />
+    <Compile Include="Data\Query\Exception\UniqueConstraintViolated.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Exception\AdapterException.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Exception\SuccessWithCompilationError.cs" />
+    <Compile Include="Data\Query\QueryParameter.cs" />
+    <Compile Include="Data\Store\Adapter\IAdapterManager.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Adapter.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Cursor.cs" />
     <Compile Include="Http\BaseController.cs" />
-    <Compile Include="Database\BaseCursor.cs" />
-    <Compile Include="Database\Cursor.cs" />
-    <Compile Include="Database\CursorResult.cs" />
-    <Compile Include="Database\Connection.cs" />
-    <Compile Include="Data\Adapter\Oracle\Exception\Code.cs" />
-    <Compile Include="Data\Adapter\Oracle\Exception\DependencyError.cs" />
-    <Compile Include="Application\QueryException\DisabledAccount.cs" />
-    <Compile Include="Data\Adapter\Oracle\Exception\DuplicateKey.cs" />
-    <Compile Include="Data\Adapter\Oracle\Exception\InsufficientPrivileges.cs" />
-    <Compile Include="Application\QueryException\InvalidIdentifier.cs" />
-    <Compile Include="Application\QueryException\InvalidPassword.cs" />
-    <Compile Include="Database\Error\QueryException.cs" />
-    <Compile Include="Application\QueryException\SessionDontExists.cs" />
+    <Compile Include="Data\Query\BaseCursor.cs" />
+    <Compile Include="Data\Query\Cursor.cs" />
+    <Compile Include="Data\Query\CursorResult.cs" />
+    <Compile Include="Data\Query\Connection.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Exception\Code.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Exception\DependencyError.cs" />
+    <Compile Include="App\QueryException\DisabledAccount.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Exception\DuplicateKey.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\Exception\InsufficientPrivileges.cs" />
+    <Compile Include="App\QueryException\InvalidIdentifier.cs" />
+    <Compile Include="App\QueryException\InvalidPassword.cs" />
+    <Compile Include="Data\Query\Exception\QueryException.cs" />
+    <Compile Include="App\QueryException\SessionDontExists.cs" />
     <Compile Include="Debug\Connection.cs" />
     <Compile Include="Debug\Controller.cs" />
     <Compile Include="Debug\Cursor.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="Model\ForeignKey.cs" />
     <Compile Include="Model\GroupOperator.cs" />
     <Compile Include="Model\Interface\IQueryResult.cs" />
-    <Compile Include="Data\Adapter\IAdapter.cs" />
+    <Compile Include="Data\Store\Adapter\IAdapter.cs" />
     <Compile Include="Model\Interface\IDataHandler.cs" />
     <Compile Include="Model\Interface\IModel.cs" />
     <Compile Include="Model\IntegerField.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="Model\Query\SqlQuery.cs" />
     <Compile Include="Model\TimeStampField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

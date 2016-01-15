@@ -1,5 +1,5 @@
-﻿using AdminLib.Database;
-using AdminLib.Database.Error;
+﻿using AdminLib.Data.Query;
+using AdminLib.Data.Query.Exception;
 using System;
 using System.Collections.Generic;
 using System.Linq;

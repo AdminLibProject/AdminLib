@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Data;
-using AdminLib.Database;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model {
     /*

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using db = AdminLib.Database;
+using db = AdminLib.Data.Query;
 
 namespace AdminLib.Debug {
     public class Connection : DebugObject {
@@ -13,11 +13,11 @@ namespace AdminLib.Debug {
         /******************** Constructors ********************/
         public Connection(db.Connection connection) {
 
-            Auth.Session.SessionConnection sessionConnection;
+            App.Auth.Session.SessionConnection sessionConnection;
 
-            if (connection is Auth.Session.SessionConnection) {
+            if (connection is App.Auth.Session.SessionConnection) {
 
-                sessionConnection = (Auth.Session.SessionConnection) connection;
+                sessionConnection = (App.Auth.Session.SessionConnection) connection;
 
                 this.id        = sessionConnection.id;
                 this.sessionID = sessionConnection.session != null ? sessionConnection.session.sessionId : null;

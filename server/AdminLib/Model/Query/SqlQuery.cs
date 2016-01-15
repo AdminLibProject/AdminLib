@@ -4,13 +4,13 @@ using System.Linq;
 using System.Web;
 using AdminLib.Model.Model;
 using AdminLib.Model.Field;
-using AdminLib.Data.Adapter;
+using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model.Query {
 
     using System.Data;
     using System.Collections;
-    using Database;
     /// <summary>
     ///     This class is small, but very complexe.
     ///     Sorry for that. I try to add a maximum of comment, but still... don't discourage ;-)

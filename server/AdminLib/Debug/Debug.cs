@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using db=AdminLib.Database;
+using db=AdminLib.Data.Query;
 using AdminLib.App;
 
 namespace AdminLib.Debug {
@@ -22,9 +22,9 @@ namespace AdminLib.Debug {
         /******************** Constructors ********************/
         public Debug(Http.BaseController controller) {
 
-            db.Connection[] listConnections;
-            Connection          connection;
-            Auth.Session[]      sessions;
+            db.Connection[]    listConnections;
+            Connection         connection;
+            App.Auth.Session[] sessions;
 
             this.controller = controller.debug;
 
@@ -35,7 +35,7 @@ namespace AdminLib.Debug {
             this.properties = new Properties();
 
             // Sessions
-            sessions = Auth.Session.GetSessions();
+            sessions = App.Auth.Session.GetSessions();
 
             this.sessions = new Session[sessions.Length];
 

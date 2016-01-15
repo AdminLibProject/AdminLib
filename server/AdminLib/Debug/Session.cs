@@ -6,12 +6,12 @@ using System.Web;
 namespace AdminLib.Debug {
     public class Session {
         /******************** Attributes ********************/
-        public  string       id;
-        private Auth.Session session;
-        public  User         user;
+        public  string           id;
+        private App.Auth.Session session;
+        public  User             user;
 
         /******************** Constructors ********************/
-        public Session (Auth.Session session) {
+        public Session (App.Auth.Session session) {
 
             this.session = session;
             this.id      = session.sessionId;

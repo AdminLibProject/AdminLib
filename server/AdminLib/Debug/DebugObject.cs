@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LogClass = AdminLib.Debug.Log;
-using db = AdminLib.Database;
+using db = AdminLib.Data.Query;
 
 namespace AdminLib.Debug
 {
@@ -53,7 +53,7 @@ namespace AdminLib.Debug
         /// <param name="message">Message to log</param>
         /// <param name="level">Level of the entry</param>
         /// <param name="error">Enventual error</param>
-        public void Log(string message, db.Error.QueryException error, LogClass.Level level = LogClass.Level.normal) {
+        public void Log(string message, db.Exception.QueryException error, LogClass.Level level = LogClass.Level.normal) {
             LogClass log;
 
             if (!Debug.IsEnabled()) return;
