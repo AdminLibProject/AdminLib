@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-using Oracle.ManagedDataAccess.Client;
 using System.Data;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model {
     /*
@@ -125,7 +125,12 @@ namespace AdminLib.Model {
         /// <param name="parameters">List of parameters of the SQL query. Used to add the new OracleParameter objects</param>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        public static string toSQL(this FilterOperator type, string column, OracleDbType dbType, string[] values, List<OracleParameter> parameters, string parameterName=null) {
+        public static string toSQL ( this FilterOperator  type
+                                   , string               column
+                                   , DbType               dbType
+                                   , string[]             values
+                                   , List<QueryParameter> parameters
+                                   , string parameterName=null) {
 
             bool   addParameter;
             bool   first;
@@ -146,15 +151,13 @@ namespace AdminLib.Model {
 
                     sql += " BETWEEN " + parameterName + " AND " + paramName_max;
 
-                    parameters.Add(new OracleParameter ( direction     : ParameterDirection.Input
-                                                       , obj           : values[0] 
-                                                       , parameterName : paramName_min
-                                                       , type          : dbType) );
+                    parameters.Add(new QueryParameter ( name  : paramName_min
+                                                      , value : values[0] 
+                                                      , type  : dbType) );
 
-                    parameters.Add(new OracleParameter ( direction     : ParameterDirection.Input
-                                                       , obj           : values[1] 
-                                                       , parameterName : paramName_max
-                                                       , type          : dbType) );
+                    parameters.Add(new QueryParameter ( name  : paramName_max
+                                                      , value : values[1] 
+                                                      , type  : dbType) );
 
                     addParameter = false;
                     break;
@@ -183,10 +186,9 @@ namespace AdminLib.Model {
 
                         sql += (first ? "" : ",") + parameterName + "_" + v.ToString();
 
-                        parameters.Add(new OracleParameter ( direction     : ParameterDirection.Input
-                                                           , obj           : values[v] 
-                                                           , parameterName : parameterName + "_" + v.ToString()
-                                                           , type          : dbType) );
+                        parameters.Add(new QueryParameter ( name  : parameterName + "_" + v.ToString()
+                                                          , value : values[v] 
+                                                          , type  : dbType) );
 
                         first = false;
                     }
@@ -217,10 +219,9 @@ namespace AdminLib.Model {
 
                         sql += (first ? "" : ",") + parameterName + "_" + v.ToString();
 
-                        parameters.Add(new OracleParameter ( direction     : ParameterDirection.Input
-                                                           , obj           : values[v] 
-                                                           , parameterName : parameterName + "_" + v.ToString()
-                                                           , type          : dbType) );
+                        parameters.Add(new QueryParameter ( name  : parameterName + "_" + v.ToString()
+                                                          , value : values[v] 
+                                                          , type  : dbType) );
 
                         first = false;
                     }
@@ -247,10 +248,9 @@ namespace AdminLib.Model {
             }
 
             if (addParameter)
-                parameters.Add(new OracleParameter ( direction     : ParameterDirection.Input
-                                                   , obj           : values[0]
-                                                   , parameterName : parameterName
-                                                   , type          : dbType) );
+                parameters.Add(new QueryParameter ( name  : parameterName
+                                                  , value : values[0]
+                                                  , type  : dbType) );
 
             return sql;
         }

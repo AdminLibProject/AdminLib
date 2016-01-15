@@ -1,10 +1,8 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
+using System.Data;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     public class BooleanField : Field<bool?> {
 
         /******************** Constructors ********************/
@@ -51,8 +49,8 @@ namespace AdminLib.Model.Field {
             return "1";
         }
 
-        public override OracleDbType GetDbType() {
-            return OracleDbType.Int32;
+        public override DbType GetDbType() {
+            return DbType.Int32;
         }
 
     }

@@ -1,17 +1,16 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AdminLib.Model.Model;
 using AdminLib.Model.Field;
-using AdminLib.Model.Interface;
+using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model.Query {
 
     using System.Data;
     using System.Collections;
-
     /// <summary>
     ///     This class is small, but very complexe.
     ///     Sorry for that. I try to add a maximum of comment, but still... don't discourage ;-)
@@ -24,7 +23,7 @@ namespace AdminLib.Model.Query {
         private Dictionary<string, FromTable>         fromTables;
         private Dictionary<string,SubQuery>           nextQueries     = new Dictionary<string,SubQuery>();
         public  AStructure                            model;
-        private List<OracleParameter>                 listParameters  = new List<OracleParameter>();
+        private List<QueryParameter>                  listParameters  = new List<QueryParameter>();
         private List<OrderByElement>                  orderBy         = new List<OrderByElement>();
         private Dictionary<string, List<FieldFilter>> subQueryFilters = new Dictionary<string,List<FieldFilter>>();
         public string query {get; private set; }
@@ -32,7 +31,7 @@ namespace AdminLib.Model.Query {
         private List<SelectColumn>                    selectColumns;
         private Dictionary<string, SubQuery>          subQueries = new Dictionary<string,SubQuery>();
 
-        public OracleParameter[] parameters {
+        public QueryParameter[] parameters {
             get {
                 return this.listParameters.ToArray();
             }
@@ -442,7 +441,7 @@ namespace AdminLib.Model.Query {
                 return this.sqlQuery;
             }
 
-            public void Execute(IConnection connection) {
+            public void Execute(IAdapter connection) {
 
                 object                    resultID;
                 string                    parentObjectId;
@@ -788,7 +787,7 @@ namespace AdminLib.Model.Query {
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public Object[] ExecuteQuery (IConnection connection) {
+        public Object[] ExecuteQuery (IAdapter connection) {
 
             DataColumn                 column;
             Dictionary<string, Object> currentResult;
@@ -805,7 +804,7 @@ namespace AdminLib.Model.Query {
             FromTable                  table;
             Object                     value;
 
-            dataTable = connection.QueryDataTable ( sqlQuery   : this.query
+            dataTable = connection.QueryDataTable ( query   : this.query
                                                   , parameters : this.parameters);
 
             nbRows = dataTable.Rows.Count;

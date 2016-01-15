@@ -1,13 +1,13 @@
 ﻿using AdminLib.Model.Model;
-using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
-using AdminLib.Model.Interface;
+using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Query;
 
-namespace AdminLib.Model.Query {
+namespace AdminLib.Model.Query
+{
     internal static class DML {
 
         /******************** Methods ********************/
@@ -21,7 +21,7 @@ namespace AdminLib.Model.Query {
         ///     If no ID has been created (e.g because the item is not sequence based), then null is returned.
         /// </summary>
         /// <returns>Newly created ID</returns>
-        public static int? Create(IConnection connection, AStructure model, object instance, string[] fields=null) {
+        public static int? Create(IAdapter connection, AStructure model, object instance, string[] fields=null) {
 
             Field.BaseField[]     fieldsToCreate;
             bool                  createWithSequence;
@@ -29,9 +29,9 @@ namespace AdminLib.Model.Query {
             string                query;
             string                columnClause;
             string                fromClause;
-            OracleParameter       parameter;
+            QueryParameter        parameter;
             string                parameterName;
-            List<OracleParameter> parameters;
+            List<QueryParameter>  parameters;
             object                value;
             string                valueClause;
 
@@ -57,7 +57,7 @@ namespace AdminLib.Model.Query {
             else
                 fieldsToCreate = model.GetFields(fields, false);
 
-            parameters = new List<OracleParameter>();
+            parameters = new List<QueryParameter>();
 
             if (createWithSequence)
                 id = DML.GetNextSequenceValue ( connection : connection
@@ -85,8 +85,8 @@ namespace AdminLib.Model.Query {
                     valueClause  += ":" + parameterName + ",";
                 }
 
-                parameter = new OracleParameter ( parameterName : parameterName
-                                                , obj           : value);
+                parameter = new QueryParameter ( name  : parameterName
+                                               , value : value);
 
                 parameters.Add(parameter);
             }
@@ -105,8 +105,8 @@ namespace AdminLib.Model.Query {
                     + " SELECT " + valueClause
                     + "   FROM " + fromClause;
 
-            connection.ExecuteDML ( sqlQuery   : query
-                                    , parameters : parameters.ToArray());
+            connection.ExecuteDML ( query      : query
+                                  , parameters : parameters.ToArray());
 
             return id;
         }
@@ -117,16 +117,16 @@ namespace AdminLib.Model.Query {
         /// <param name="connection"></param>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        public static void Delete(IConnection connection, AStructure model, object instance) {
+        public static void Delete(IAdapter connection, AStructure model, object instance) {
 
-            OracleParameter       parameter;
+            QueryParameter        parameter;
             string                parameterName;
-            List<OracleParameter> parameters;
+            List<QueryParameter>  parameters;
             string                query;
             object                value;
             string                whereClause;
 
-            parameters  = new List<OracleParameter>();
+            parameters  = new List<QueryParameter>();
             whereClause = "";
 
             // Building the "WHERE" clause
@@ -140,8 +140,8 @@ namespace AdminLib.Model.Query {
                 else
                     whereClause  += field.dbColumn + "= :" + parameterName + " AND ";
 
-                parameter = new OracleParameter ( parameterName : parameterName
-                                                , obj           : value);
+                parameter = new QueryParameter ( name  : parameterName
+                                               , value : value);
 
                 parameters.Add(parameter);
             }
@@ -151,7 +151,7 @@ namespace AdminLib.Model.Query {
             query =   "DELETE FROM " + model.dbTable
                     + " WHERE " + whereClause;
 
-            connection.ExecuteDML ( sqlQuery   : query
+            connection.ExecuteDML ( query      : query
                                   , parameters : parameters.ToArray());
         }
 
@@ -161,14 +161,14 @@ namespace AdminLib.Model.Query {
         /// <param name="connection">Connection to use to make the SQL query</param>
         /// <param name="sequence">Sequence to use</param>
         /// <returns></returns>
-        public static int GetNextSequenceValue(IConnection connection, string sequence) {
+        public static int GetNextSequenceValue(IAdapter connection, string sequence) {
 
             string    query;
             DataTable data;
 
             query = "SELECT TO_NUMBER(" + sequence + ".NEXTVAL) FROM DUAL";
 
-            data = connection.QueryDataTable(sqlQuery : query);
+            data = connection.QueryDataTable(query : query);
 
             return Convert.ToInt32(data.Rows[0][0]);
         }
@@ -181,22 +181,26 @@ namespace AdminLib.Model.Query {
         /// <param name="instance">Instance that will be updated in the database</param>
         /// <param name="fields">Fields to update. If null, then all fields will be updated. NULL fields will not be updated</param>
         /// <param name="emptyFields">All given fields will be emptied in the database</param>
-        public static void Update(IConnection connection, AStructure model, object instance, string[] fields=null, string[] emptyFields=null) {
+        public static void Update ( IAdapter   connection
+                                  , AStructure model
+                                  , object     instance
+                                  , string[]   fields      = null
+                                  , string[]   emptyFields = null) {
 
-            Field.BaseField[]     fieldsToUpdate;
-            Field.BaseField[]     fieldsToEmpty;
-            OracleParameter       parameter;
-            string                parameterName;
-            List<OracleParameter> parameters;
-            string                query;
-            string                setClause;
-            object                value;
-            string                whereClause;
+            Field.BaseField[]    fieldsToUpdate;
+            Field.BaseField[]    fieldsToEmpty;
+            QueryParameter       parameter;
+            string               parameterName;
+            List<QueryParameter> parameters;
+            string               query;
+            string               setClause;
+            object               value;
+            string               whereClause;
 
             whereClause = "";
             setClause   = "";
 
-            parameters = new List<OracleParameter>();
+            parameters = new List<QueryParameter>();
 
             // Retreiving the list of fields to update
             if (fields == null)
@@ -233,8 +237,8 @@ namespace AdminLib.Model.Query {
                         setClause += field.dbColumn + "=NVL(:" + parameterName + "," + field.dbColumn + "),";
                 }
 
-                parameter = new OracleParameter ( parameterName : parameterName
-                                                , obj           : value);
+                parameter = new QueryParameter ( name  : parameterName
+                                               , value : value);
 
                 parameters.Add(parameter);
             }
@@ -262,7 +266,7 @@ namespace AdminLib.Model.Query {
                     + " SET "   + setClause
                     + " WHERE " + whereClause;
 
-            connection.ExecuteDML ( sqlQuery   : query
+            connection.ExecuteDML ( query      : query
                                   , parameters : parameters.ToArray());
 
         }

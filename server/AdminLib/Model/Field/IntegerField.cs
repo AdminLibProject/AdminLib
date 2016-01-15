@@ -1,12 +1,12 @@
 ﻿using System;
 using AdminLib.Model.Model;
-using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
 namespace AdminLib.Model.Field {
     public class IntegerField : Field<int?> {
 
         /******************** Static Attributes ********************/
-        public const OracleDbType dbType = OracleDbType.Int32;
+        public const DbType dbType = DbType.Int32;
 
         /******************** Attributes ********************/
         public    string sequence { get; private set; }
@@ -79,7 +79,7 @@ namespace AdminLib.Model.Field {
                 return Convert.ToInt32(value);
         }
 
-        public override OracleDbType GetDbType() {
+        public override DbType GetDbType() {
             return IntegerField.dbType;
         }
 

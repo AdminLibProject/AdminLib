@@ -11,7 +11,7 @@ namespace AdminLib.Debug {
         public string email;
 
         /******************** Constructors ********************/
-        public User(Auth.User user) {
+        public User(App.Auth.User user) {
             this.id       = user.id;
             this.email    = user.email;
             this.username = user.username;

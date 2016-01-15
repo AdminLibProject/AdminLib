@@ -1,13 +1,12 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using AdminLib.Model.Field;
 using AdminLib.Model.Model;
 using AdminLib.Model;
+using AdminLib.Data.Query;
 
-namespace AdminLib.Model.Query {
+namespace AdminLib.Model.Query
+{
     public class FieldFilter {
 
         /******************** Attributes ********************/
@@ -17,11 +16,11 @@ namespace AdminLib.Model.Query {
             }
         }
         private bool           array;
-        public  BaseField      field      { get; private set; }
-        public  Path      path       { get; private set; }
-        public  FilterOperator type       { get; private set; }
+        public  BaseField      field     { get; private set; }
+        public  Path           path      { get; private set; }
+        public  AStructure     rootModel { get; private set; }
+        public  FilterOperator type      { get; private set; }
         private string[]       values;
-        public  AStructure      rootModel { get; private set; }
 
         /******************** Constructors ********************/
         // String value, with type
@@ -145,7 +144,7 @@ namespace AdminLib.Model.Query {
         /// </summary>
         /// <param name="?"></param>
         /// <returns></returns>
-        public string toSQL(string tableAlias, List<OracleParameter> parameters, string parameterName=null) {
+        public string toSQL(string tableAlias, List<QueryParameter> parameters, string parameterName=null) {
 
             return this.type.toSQL ( column        : tableAlias + '.' + this.field.dbColumn
                                    , dbType        : this.field.GetDbType()

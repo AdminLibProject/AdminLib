@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Web;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     public abstract class Field<T> : BaseField {
 
         /******************** Attributes ********************/
@@ -68,7 +68,7 @@ namespace AdminLib.Model.Field {
         
         public virtual void ValidateValue(T value) {}
 
-        public override Oracle.ManagedDataAccess.Client.OracleDbType GetDbType() {
+        public override DbType GetDbType() {
             throw new NotImplementedException();
         }
 

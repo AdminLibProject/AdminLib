@@ -1,10 +1,8 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
+using System.Data;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     public class TimestampField : DateTimeField {
 
         /******************** Constructors ********************/
@@ -29,8 +27,8 @@ namespace AdminLib.Model.Field {
         }
 
         /******************** Methods ********************/
-        public override OracleDbType GetDbType() {
-            return OracleDbType.TimeStamp;
+        public override DbType GetDbType() {
+            return DbType.DateTimeOffset;
         }
 
     }

@@ -1,10 +1,7 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
-namespace AdminLib.Model {
+namespace AdminLib.Model
+{
     /*
      * List of all filter's type
      * A filter type define the condition of a filter.
