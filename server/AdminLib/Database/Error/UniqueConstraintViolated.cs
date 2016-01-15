@@ -1,18 +1,18 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Common;
 
-namespace AdminLib.Database.Error {
+namespace AdminLib.Database.Error
+{
 
     public class UniqueConstraintViolated : QueryException {
 
         //******************** Constants ********************/
-        public new const Code code = Code.UNIQUE_CONSTRAINT_VIOLATED;
+        public string code = "AdminLib.Database.Error.UniqueConstraintViolated";
 
         //******************** Constructors ********************/
-        public UniqueConstraintViolated(OracleException exception, string query=null, OracleParameter[] parameters=null) : base(exception, query, parameters) { }
+        public UniqueConstraintViolated ( DbException      exception
+                                        , string           query=null
+                                        , QueryParameter[] parameters=null)
+            : base(exception, query, parameters) { }
 
     }
 }

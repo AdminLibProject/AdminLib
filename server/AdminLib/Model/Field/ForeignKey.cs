@@ -1,9 +1,10 @@
 ﻿using System;
 using AdminLib.Model.Model;
 using System.Reflection;
-using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     public class ForeignKey<T> : Field.Field<T?>, IForeignKey
         where T: struct {
 
@@ -34,7 +35,7 @@ namespace AdminLib.Model.Field {
 
         /******************** Methods ********************/
 
-        public override OracleDbType GetDbType() {
+        public override DbType GetDbType() {
 
             Type type;
 

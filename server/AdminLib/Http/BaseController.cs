@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using Oracle.ManagedDataAccess.Client;
 using System.Web;
 using AdminLib.Model;
 using AdminLib.Model.Model;
@@ -17,8 +16,10 @@ using System.Threading.Tasks;
 using System.IO;
 using AdminLib.Application;
 using AdminLib.Model.Interface;
+using AdminLib.Database.Error;
 
-namespace AdminLib.Http {
+namespace AdminLib.Http
+{
     public abstract class BaseController : ApiController {
 
         /******************** Attributes ********************/
@@ -36,7 +37,7 @@ namespace AdminLib.Http {
 
         }
 
-        public db.AdminConnection connection { get; private set; }
+        public db.Connection connection { get; private set; }
 
         /// <summary>
         ///     Return the list of files provided in the header payload.
@@ -233,7 +234,7 @@ namespace AdminLib.Http {
                 this.type      = "Error";
             }
 
-            public Error(OracleException exception) {
+            public Error(QueryException exception) {
                 this.exception = typeof(T).FullName;
             }
 
@@ -318,31 +319,13 @@ namespace AdminLib.Http {
 
         public class QueryError : Error<db.Error.QueryException>  {
 
-            public db.Error.Code?                      code             { get; private set; }
             public string                              query            { get; private set; }
             public db.Error.QueryException.Parameter[] parameters       { get; private set; }
-            public ExceptionInformation                informations     { get; private set; }
 
             public QueryError(db.Error.QueryException exception) : base(exception) {
-
                 this.query            = exception.query;
                 this.parameters       = exception.parameters;
-                this.code             = exception.code;
                 this.type             = "DatabaseException";
-
-                this.informations     = new ExceptionInformation (exception.exception);
-            }
-
-            public class ExceptionInformation {
-
-                public int    number  {get; private set; }
-                public string message {get; private set; }
-
-                public ExceptionInformation(OracleException exception) {
-                    this.number  = exception.HResult;
-                    this.message = exception.Message;
-                }
-
             }
 
         }
@@ -601,7 +584,7 @@ namespace AdminLib.Http {
 
         // Internal Server Error
 
-        private HttpResponseMessage InternalServerError(db.Error.QueryException exception) {
+        private HttpResponseMessage InternalServerError(QueryException exception) {
 
             this.debug.Log ( message : "InternalServerError"
                            , level   : Debug.Log.Level.error
@@ -611,22 +594,10 @@ namespace AdminLib.Http {
                                  , data       : new QueryError(exception));
         }
 
-        private HttpResponseMessage InternalServerError(OracleException exception) {
-
-            this.debug.Log ( message : "InternalServerError"
-                           , level   : Debug.Log.Level.error
-                           , error   : exception);
-
-            return this.response ( statusCode : HttpStatusCode.InternalServerError
-                                 , data       : new Error<OracleException>(exception));
-        }
-
         protected new HttpResponseMessage InternalServerError(Exception exception=null) {
 
             if (exception is db.Error.QueryException)
                 return this.InternalServerError((db.Error.QueryException) exception);
-            else if (exception is OracleException)
-                return this.InternalServerError((OracleException) exception);
 
             this.debug.Log ( message : "InternalServerError"
                            , level   : Debug.Log.Level.error
@@ -667,7 +638,9 @@ namespace AdminLib.Http {
         ///     OK response with data
         /// </summary>
         /// <returns></returns>
-        protected virtual HttpResponseMessage response<T> (T data, HttpStatusCode statusCode=HttpStatusCode.OK, string message=null)
+        protected virtual HttpResponseMessage response<T> ( T data
+                                                          , HttpStatusCode statusCode=HttpStatusCode.OK
+                                                          , string message=null)
             where T: IQueryResult {
 
             HttpResponseMessage response;
@@ -708,8 +681,9 @@ namespace AdminLib.Http {
             if (!this.header.keepAlive)
                 this.connection.Close();
 
-            // Cleaning cursors
-            db.BaseCursor.Clean();
+            // Cleaning cursors of the session
+            // TODO : Why ??!
+            Auth.Session.Clean(this.session.sessionId);
 
             debug.stopTimer("AdminHttpController.response");
             debug.stopTimer("AdminHttpController");
@@ -795,7 +769,7 @@ namespace AdminLib.Http {
                                  , statusCode : HttpStatusCode.Unauthorized);
         }
 
-        public void SetConnection(db.AdminConnection connection) {
+        public void SetConnection(db.Connection connection) {
             if (this.connection != null)
                 throw new Exception("The controller has already a connection defined");
 

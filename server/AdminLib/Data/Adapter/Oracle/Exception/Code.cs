@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace AdminLib.Database.Error
+namespace AdminLib.Data.Adapter.Oracle.Exception
 {
     public enum Code {
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using db=AdminLib.Database;
+using AdminLib.App;
 
 namespace AdminLib.Debug {
 
@@ -21,7 +22,7 @@ namespace AdminLib.Debug {
         /******************** Constructors ********************/
         public Debug(Http.BaseController controller) {
 
-            db.AdminConnection[] listConnections;
+            db.Connection[] listConnections;
             Connection          connection;
             Auth.Session[]      sessions;
 
@@ -43,9 +44,9 @@ namespace AdminLib.Debug {
             }
 
             // Connexions
-            listConnections = new db.AdminConnection[db.AdminConnection.connections.Count];
-            db.AdminConnection.connections.CopyTo(listConnections, 0);
-            this.connections = new Connection[db.AdminConnection.connections.Count];
+            listConnections = new db.Connection[db.Connection.connections.Count];
+            db.Connection.connections.CopyTo(listConnections, 0);
+            this.connections = new Connection[db.Connection.connections.Count];
 
             for(int e=0; e < listConnections.Length; e++) {
                 connection = listConnections[e].debug;

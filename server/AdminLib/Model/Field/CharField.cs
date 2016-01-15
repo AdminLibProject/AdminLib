@@ -1,16 +1,14 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
+using System.Data;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     public class CharField : Field<string> {
 
         /******************** Attributes ********************/
 
-        public int?   max_length { get; private set; }
-        public const OracleDbType dbType = OracleDbType.Varchar2;
+        public int?  max_length { get; private set; }
+        public const DbType dbType = DbType.String;
 
         /******************** Constructors ********************/
         public CharField ( string   dbColumn
@@ -55,7 +53,7 @@ namespace AdminLib.Model.Field {
 
         }
 
-        public override OracleDbType GetDbType() {
+        public override DbType GetDbType() {
             return CharField.dbType;
         }
     }

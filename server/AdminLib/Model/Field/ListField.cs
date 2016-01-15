@@ -1,9 +1,10 @@
 ﻿using AdminLib.Model.Model;
-using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Data;
 using System.Reflection;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     public class ListField : BaseField, IListField {
 
         /******************** Model ********************/
@@ -130,8 +131,8 @@ namespace AdminLib.Model.Field {
             return this.refModel;
         }
 
-        public override OracleDbType GetDbType() {
-            return OracleDbType.Int32;
+        public override DbType GetDbType() {
+            return DbType.Int32;
         }
 
     }

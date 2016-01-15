@@ -1,8 +1,8 @@
 ﻿using AdminLib.Model.Model;
 using AdminLib.Model.Query;
-using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -267,7 +267,7 @@ namespace AdminLib.Model.Field {
         ///     An example of validation is to check that the property is an int if the field is an IntegerField
         /// </summary>
         public virtual void Validate() { }
-        public abstract OracleDbType GetDbType();
+        public abstract DbType GetDbType();
 
         /******************** Static methods ********************/
         public static bool IsValidApiName(string name) {

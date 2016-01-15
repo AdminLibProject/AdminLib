@@ -1,6 +1,7 @@
 ﻿using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using System;
+using AdminLib.Data.Adapter;
 using AdminLib.Model.Interface;
 
 namespace AdminLib.Model {
@@ -85,7 +86,7 @@ namespace AdminLib.Model {
             return sqlQuery;
         }
 
-        public static Self QueryItem(IConnection connection, int id, string[] fields) {
+        public static Self QueryItem(IAdapter connection, int id, string[] fields) {
 
             return (Self) Model<Self>.QueryItem ( connection : connection
                                                       , id         : id
@@ -101,7 +102,7 @@ namespace AdminLib.Model {
         /// <param name="fields">API Name of the fields to return</param>
         /// <param name="orderBy"></param>
         /// <returns></returns>
-        public static Self[] QueryItems ( IConnection connection
+        public static Self[] QueryItems ( IAdapter connection
                                         , Filter      filter
                                         , string[]    fields
                                         , OrderBy[]   orderBy) {
@@ -122,7 +123,7 @@ namespace AdminLib.Model {
         }
 
         /******************** Methods ********************/
-        public virtual void Add<Model>(IConnection connection, Model model, string path=null) {
+        public virtual void Add<Model>(IAdapter connection, Model model, string path=null) {
             throw new NotImplementedException();
         }
 
@@ -151,7 +152,7 @@ namespace AdminLib.Model {
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="fields"></param>
-        public virtual void Create(IConnection connection, string[] fields=null) {
+        public virtual void Create(IAdapter connection, string[] fields=null) {
 
             int? id;
 
@@ -165,7 +166,7 @@ namespace AdminLib.Model {
                                             , value    : id);
         }
 
-        public virtual void Delete(IConnection connection) {
+        public virtual void Delete(IAdapter connection) {
             DML.Delete ( connection : connection
                        , model      : Model<Self>.structure
                        , instance   : this);
@@ -181,11 +182,11 @@ namespace AdminLib.Model {
         /// <param name="connection"></param>
         /// <param name="model"></param>
         /// <param name="path"></param>
-        public virtual void Remove<Model>(IConnection connection, Model model, string path=null) {
+        public virtual void Remove<Model>(IAdapter connection, Model model, string path=null) {
             throw new NotImplementedException();
         }
 
-        public virtual void Update(IConnection connection, string[] fields=null, string[] emptyFields=null) {
+        public virtual void Update(IAdapter connection, string[] fields=null, string[] emptyFields=null) {
 
             DML.Update ( connection   : connection
                        , model       : Model<Self>.structure

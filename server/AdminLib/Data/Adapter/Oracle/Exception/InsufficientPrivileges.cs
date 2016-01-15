@@ -1,20 +1,18 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using AdminLib.Database.Error;
+using AdminLib.Database;
 
-namespace AdminLib.Database.Error
-{
+namespace AdminLib.Data.Adapter.Oracle.Exception {
+
     public class InsufficientPrivileges : QueryException {
 
         //******************** Constants ********************/
-        public new const Code code = Code.INSUFFICIENT_PRIVILEGES;
+        public const Code code = Code.INSUFFICIENT_PRIVILEGES;
 
         //******************** Constructors ********************/
         public InsufficientPrivileges ( OracleException exception
                                       , string query=null
-                                      , OracleParameter[] parameters=null) :
+                                      , QueryParameter[] parameters=null) :
             base(exception, query, parameters) { }
 
     }

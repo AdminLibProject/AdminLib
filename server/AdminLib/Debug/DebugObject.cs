@@ -1,12 +1,10 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using LogClass = AdminLib.Debug.Log;
-using db=AdminLib.Database;
+using db = AdminLib.Database;
 
-namespace AdminLib.Debug {
+namespace AdminLib.Debug
+{
     public abstract class DebugObject {
 
         /******************** Attributes ********************/
@@ -37,25 +35,6 @@ namespace AdminLib.Debug {
         /// <param name="level">Level of the entry</param>
         /// <param name="error">Enventual error</param>
         public void Log(string message, Exception error, LogClass.Level level = LogClass.Level.normal) {
-
-            LogClass log;
-
-            if (!Debug.IsEnabled()) return;
-
-            log = new LogClass ( message : message
-                               , level   : level
-                               , error   : error);
-
-            this.logs.Add(log);
-        }
-
-        /// <summary>
-        ///     Add a log entry with an oracle exception error
-        /// </summary>
-        /// <param name="message">Message to log</param>
-        /// <param name="level">Level of the entry</param>
-        /// <param name="error">Enventual error</param>
-        public void Log(string message, OracleException error, LogClass.Level level = LogClass.Level.normal) {
 
             LogClass log;
 

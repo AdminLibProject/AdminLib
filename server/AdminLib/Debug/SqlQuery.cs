@@ -1,4 +1,5 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿using AdminLib.Database;
+using AdminLib.Database.Error;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace AdminLib.Debug {
         public string                           query;
         public Dictionary<string, SqlParameter> parameters;
         public Timer                            timer;
-        public OracleException                  exception;
+        public QueryException                   exception;
 
         /******************** Structure ********************/
         public struct SqlParameter {
@@ -20,34 +21,26 @@ namespace AdminLib.Debug {
             public string name;
             public object value;
             public string dbType;
-            public string oracleDbType;
             public string direction;
-            public bool   isNullable;
-            public byte   precision;
-            public byte   scale;
-            public int    size;
+            public bool?  isNullable;
                     
             /***** Constructors *****/
-            public SqlParameter(OracleParameter parameter) {
-                this.name         = parameter.ParameterName;
-                this.dbType       = parameter.DbType.ToString();
-                this.oracleDbType = parameter.OracleDbType.ToString();
-                this.direction    = parameter.Direction.ToString();
-                this.isNullable   = parameter.IsNullable;
-                this.precision    = parameter.Precision;
-                this.scale        = parameter.Scale;
-                this.size         = parameter.Size;
-                this.value        = parameter.Value;
+            public SqlParameter(QueryParameter parameter) {
+                this.name         = parameter.name;
+                this.value        = parameter.value;
+                this.dbType       = parameter.type.ToString();
+                this.direction    = parameter.direction.ToString();
+                this.isNullable   = parameter.nullable;
             }
 
         }
 
         /******************** Constructors ********************/
-        public SqlQuery(string query, OracleParameter[] parameters) {
+        public SqlQuery(string query, QueryParameter[] parameters) {
 
-            OracleParameter parameter;
+            QueryParameter parameter;
 
-            parameters      = parameters == null ? new OracleParameter[0] : parameters;
+            parameters      = parameters == null ? new QueryParameter[0] : parameters;
             this.query      = query;
             this.parameters = new Dictionary<string,SqlParameter>();
             this.timer      = new Timer();
@@ -55,7 +48,7 @@ namespace AdminLib.Debug {
             for (int p = 0; p < parameters.Length; p++) {
                 parameter = parameters[p];
 
-                this.parameters[parameter.ParameterName] = new SqlParameter(parameter);
+                this.parameters[parameter.name] = new SqlParameter(parameter);
             }
 
         }
@@ -66,7 +59,7 @@ namespace AdminLib.Debug {
             this.timer.stop();
         }
 
-        public void raiseError(OracleException exception) {
+        public void raiseError(QueryException exception) {
             this.end();
             this.exception = exception;
         }

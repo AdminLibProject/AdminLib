@@ -1,9 +1,5 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using db=AdminLib.Database;
+﻿using System.Collections.Generic;
+using db = AdminLib.Database;
 
 namespace AdminLib.Debug {
     public class Connection : DebugObject {
@@ -15,13 +11,22 @@ namespace AdminLib.Debug {
         public List<Cursor>   cursors = new List<Cursor>();
 
         /******************** Constructors ********************/
-        public Connection(db.AdminConnection connection) {
-            this.id        = connection.id;
-            this.sessionID = connection.sessionID;
+        public Connection(db.Connection connection) {
+
+            Auth.Session.SessionConnection sessionConnection;
+
+            if (connection is Auth.Session.SessionConnection) {
+
+                sessionConnection = (Auth.Session.SessionConnection) connection;
+
+                this.id        = sessionConnection.id;
+                this.sessionID = sessionConnection.session != null ? sessionConnection.session.sessionId : null;
+            }
+
         }
 
         /******************** Method ********************/
-        public SqlQuery addQuery(string query, OracleParameter[] parameters) {
+        public SqlQuery addQuery(string query, db.QueryParameter[] parameters) {
             SqlQuery sqlQuery;
 
             sqlQuery = new SqlQuery(query, parameters);

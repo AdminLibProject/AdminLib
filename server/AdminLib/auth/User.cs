@@ -1,12 +1,8 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Web;
-using db=AdminLib.Database;
+﻿using System.Collections.Generic;
+using AdminLib.Database;
 
-namespace AdminLib.Auth {
+namespace AdminLib.Auth
+{
     public class User {
 
         /******************** Static Attributes ********************/
@@ -50,27 +46,25 @@ namespace AdminLib.Auth {
         /// <summary>
         ///     Enable the current user
         /// </summary>
-        public static void disableUser(db.AdminConnection connection, int id) {
+        public static void disableUser(Connection connection, int id) {
 
-            string sqlProcedure;
-            OracleParameter[] parameters;
+            string procedure;
+            QueryParameter[] parameters;
 
-            sqlProcedure = "PAK_AUTH.DISABLE_USER(p_user_id => :id)";
+            procedure = "PAK_AUTH.DISABLE_USER";
 
             // Defining parameters
-            parameters = new OracleParameter[1];
+            parameters = new QueryParameter[1];
 
-            parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : id
-                                                , parameterName: ":id"
-                                                , type         : OracleDbType.Int32);
+            parameters[0] = new QueryParameter ( name  : "p_user_id"
+                                               , value : id);
 
             // Executing query
             try {
-                connection.ExecuteCode ( procedure : sqlProcedure
-                                            , parameters   : parameters);
+                connection.ExecuteProcedure ( procedure  : procedure
+                                            , parameters : parameters);
             }
-            catch (db.Error.InvalidID) {
+            catch (Database.Error.InvalidID) {
                 throw new Error.InvalidUser();
             }
         }
@@ -78,27 +72,25 @@ namespace AdminLib.Auth {
         /// <summary>
         ///     Enable the current user
         /// </summary>
-        public static void enableUser(db.AdminConnection connection, int id) {
+        public static void enableUser(Connection connection, int id) {
 
-            string sqlProcedure;
-            OracleParameter[] parameters;
+            string           procedure;
+            QueryParameter[] parameters;
 
-            sqlProcedure = "PAK_AUTH.ENABLE_USER(p_user_id => :id)";
+            procedure = "PAK_AUTH.ENABLE_USER";
 
             // Defining parameters
-            parameters = new OracleParameter[1];
+            parameters = new QueryParameter[1];
 
-            parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : id
-                                                , parameterName: ":id"
-                                                , type         : OracleDbType.Int32);
+            parameters[0] = new QueryParameter ( value : id
+                                               , name  : "p_user_id");
 
             // Executing query
             try {
-                connection.ExecuteCode ( procedure : sqlProcedure
+                connection.ExecuteProcedure ( procedure : procedure
                                             , parameters   : parameters);
             }
-            catch (db.Error.InvalidID) {
+            catch (Database.Error.InvalidID) {
                 throw new Error.InvalidUser();
             }
         }
@@ -136,28 +128,26 @@ namespace AdminLib.Auth {
         /// <summary>
         ///     Enable the current user
         /// </summary>
-        public static string resetPassword(db.AdminConnection connection, int id) {
+        public static string resetPassword(Connection connection, int id) {
 
-            string            newPassword;
-            OracleParameter[] parameters;
-            string            sqlFunction;
+            string           newPassword;
+            QueryParameter[] parameters;
+            string           function;
 
-            sqlFunction = "PAK_AUTH.RESET_PASSWORD(p_user_id => :id)";
+            function = "PAK_AUTH.RESET_PASSWORD";
 
             // Defining parameters
-            parameters = new OracleParameter[1];
+            parameters = new QueryParameter[1];
 
-            parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : id
-                                                , parameterName: ":id"
-                                                , type         : OracleDbType.Int32);
+            parameters[0] = new QueryParameter ( name  : "p_user_id"
+                                               , value : id);
 
             // Executing query
             try {
-                newPassword = (string) connection.ExecuteFunction ( function : sqlFunction
-                                                                  , parameters  : parameters);
+                newPassword = connection.ExecuteFunction ( function : function
+                                                         , parameters  : parameters);
             }
-            catch (db.Error.InvalidID) {
+            catch (Database.Error.InvalidID) {
                 throw new Error.InvalidUser();
             }
 
@@ -171,41 +161,38 @@ namespace AdminLib.Auth {
         /// </summary>
         /// <param name="oldPassword">Old password of the user</param>
         /// <param name="newPassword">New password of the user</param>
-        public void changePassword (db.AdminConnection connection, string oldPassword, string newPassword) {
+        public void changePassword ( Connection connection
+                                   , string     oldPassword
+                                   , string     newPassword) {
 
-            string            sqlProcedure;
-            OracleParameter[] parameters;
+            string           procedure;
+            QueryParameter[] parameters;
 
-            sqlProcedure = @"PAK_AUTH.CHANGE_PASSWORD ( p_old_password => :old_password
-                                                      , p_new_password => :new_password)";
+            procedure = "PAK_AUTH.CHANGE_PASSWORD";
 
             // Defining parameters
-            parameters    = new OracleParameter[2];
+            parameters    = new QueryParameter[2];
 
-            parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : oldPassword
-                                                , parameterName: ":old_password"
-                                                , type         : OracleDbType.Varchar2);
+            parameters[0] = new QueryParameter ( name  : "p_old_password"
+                                               , value : oldPassword);
 
-            parameters[1] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : newPassword
-                                                , parameterName: ":new_password"
-                                                , type         : OracleDbType.Varchar2);
+            parameters[1] = new QueryParameter ( name  : "p_new_password"
+                                               , value : newPassword);
 
             try {
-                connection.ExecuteCode ( procedure : sqlProcedure
-                                            , parameters   : parameters);
+                connection.ExecuteProcedure ( procedure  : procedure
+                                            , parameters : parameters);
             }
-            catch (db.Error.InvalidData) {
+            catch (Database.Error.InvalidData) {
                 throw new Error.InvalidPasswordFormat();
             }
-            catch (db.Error.InvalidID) {
+            catch (Database.Error.InvalidID) {
                 throw new Error.InvalidUser();
             }
-            catch (db.Error.InvalidPassword) {
+            catch (App.QueryException.InvalidPassword) {
                 throw new Error.InvalidPassword();
             }
-            catch (db.Error.DisabledAccount) {
+            catch (App.QueryException.DisabledAccount) {
                 throw new Error.DisabledAccount();
             }
 
@@ -216,30 +203,25 @@ namespace AdminLib.Auth {
         ///     when the only information available is either the
         ///     email and/or the username.
         /// </summary>
-        public void findUserId(db.AdminConnection connection) {
+        public void findUserId(Connection connection) {
 
-            string sqlFunction;
-            OracleParameter[] parameters;
+            string function;
+            QueryParameter[] parameters;
 
-            sqlFunction = @"PAK_USER.GET_USER_ID ( p_user_email => :email
-                                                 , p_user_name  => :username)";
+            function = "PAK_USER.GET_USER_ID";
 
             // Defining parameters
-            parameters = new OracleParameter[2];
+            parameters = new QueryParameter[2];
 
-            parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : this.email
-                                                , parameterName: ":email"
-                                                , type         : OracleDbType.Varchar2);
+            parameters[0] = new QueryParameter ( name  : "p_user_email"
+                                               , value : this.email);
 
-            parameters[1] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : this.username
-                                                , parameterName: ":username"
-                                                , type         : OracleDbType.Varchar2);
+            parameters[1] = new QueryParameter ( name  : "p_user_name"
+                                               , value : this.username);
 
             // Executing query
-            this.id =  connection.FunctionAsInt ( sqlFunction : sqlFunction
-                                                , parameters  : parameters);
+            this.id =  connection.ExecuteFunction<int> ( function   : function
+                                                       , parameters : parameters);
 
             User.users[this.id ?? -1] = this;
         }

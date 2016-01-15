@@ -1,11 +1,10 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
-using db=AdminLib.Database;
+using db = AdminLib.Database;
 using AdminLib.Http;
+using AdminLib.Database;
+using AdminLib.App.QueryException;
 
 namespace AdminLib.Auth {
     public class Session {
@@ -35,12 +34,13 @@ namespace AdminLib.Auth {
          */
 
         /******************** Static Attributes ********************/
+        private static Dictionary<string, Dictionary<int, BaseCursor>> cursors = new Dictionary<string, Dictionary<int, BaseCursor>>();
         private static Session serverSession;
         private static Dictionary<string, Session> sessions = new Dictionary<string,Session>();
 
         /******************** Attributes ********************/
 
-        private Dictionary<string, db.AdminConnection> connections;
+        private Dictionary<string, SessionConnection> connections;
 
         /// <summary>
         ///     ID of the session
@@ -48,7 +48,7 @@ namespace AdminLib.Auth {
         public  string           sessionId  { get; private set; }
         public  User             user       { get; private set; }
 
-        /******************** Class ********************/
+        /******************** Classes ********************/
 
         private static class dbPackage {
 
@@ -60,33 +60,31 @@ namespace AdminLib.Auth {
             /// <param name="sessionID"></param>
             /// <returns></returns>
             public static int? GetUserIdFromSession ( string            sessionID
-                                                    , db.AdminConnection connection) {
-                string            sqlFunction;
-                OracleParameter[] parameters;
-                int?              userId;
+                                                    , db.Connection connection) {
+                string           sqlFunction;
+                QueryParameter[] parameters;
+                int?             userId;
 
                 // Creating the function
-                sqlFunction = "NVL(PAK_AUTH.GET_USER_ID_FROM_SESSION(p_session_id => :session_id), -1)";
+                sqlFunction = "PAK_AUTH.GET_USER_ID_FROM_SESSION";
 
                 // Defining parameters
-                parameters = new OracleParameter[1];
+                parameters = new QueryParameter[1];
 
-                parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                    , obj          : sessionID
-                                                    , parameterName: ":session_id"
-                                                    , type         : OracleDbType.Varchar2);
+                parameters[0] = new QueryParameter ( name      : "p_session_id"
+                                                   , value     : sessionID);
 
                 // Retreiving the user_id
                 // We use the server session to retreive the ID
 
                 try {
 
-                    userId = connection.FunctionAsInt ( sqlFunction : sqlFunction
-                                                      , parameters  : parameters);
+                    userId = connection.ExecuteFunction<int> ( function   : sqlFunction
+                                                             , parameters : parameters);
 
-                    return userId;
+                    return userId ?? -1;
                 }
-                catch (db.Error.SessionDontExists) {
+                catch (SessionDontExists) {
                     throw new Error.SessionDontExists();
                 }
 
@@ -96,7 +94,7 @@ namespace AdminLib.Auth {
             ///     Create a new session.
             /// </summary>
             /// <returns>Id of the created session</returns>
-            public static string create(db.AdminConnection connection) {
+            public static string create(db.Connection connection) {
                 string sessionId;
                 string sqlFunction;
 
@@ -104,9 +102,47 @@ namespace AdminLib.Auth {
 
                 sqlFunction = "PAK_AUTH.CREATE_SESSION()";
 
-                sessionId = (string) connection.ExecuteFunction ( function : sqlFunction );
+                sessionId = connection.ExecuteFunction ( function : sqlFunction );
 
                 return sessionId;
+            }
+
+        }
+
+        public class SessionConnection : db.Connection {
+
+            public string  id      { get; private set; }
+            public Session session { get; private set; }
+
+            /***** Constructors *****/
+            public SessionConnection ( bool    autoCommit
+                                     , string  id
+                                     , Session session) : base (autoCommit) {
+
+                this.id      = id;
+                this.session = session;
+
+            }
+
+            /***** Methods *****/
+
+            /// <summary>
+            ///     Initialize the connection
+            /// </summary>
+            public void Initialize() {
+                QueryParameter[] parameters;
+                string           procedure;
+
+                procedure = "PAK_AUTH.DEFINE_SESSION";
+
+                parameters = new QueryParameter[1];
+
+                parameters[0] = new QueryParameter ( name  : "p_session_id"
+                                                   , value : this.session.sessionId
+                                                   , type  : DbType.String);
+
+                this.ExecuteProcedure ( procedure  : procedure
+                                      , parameters : parameters);
             }
 
         }
@@ -138,7 +174,7 @@ namespace AdminLib.Auth {
             this.user      = user;
 
             Session.sessions[this.sessionId] = this;
-            this.connections = new Dictionary<string, db.AdminConnection>();
+            this.connections = new Dictionary<string, SessionConnection>();
         }
 
         /// <summary>
@@ -148,8 +184,103 @@ namespace AdminLib.Auth {
         /// <param name="sessionId"></param>
         private Session(string sessionId) {
             this.sessionId = sessionId;
-            this.connections = new Dictionary<string,db.AdminConnection>();
+            this.connections = new Dictionary<string, SessionConnection>();
         }
+
+        /******************** Static methods ********************/
+
+        /// <summary>
+        ///     Add the cursor to the list of all cursors
+        /// </summary>
+        /// <param name="cursor"></param>
+        private static void AddCursor(BaseCursor cursor) {
+
+            string  sessionId;
+
+            sessionId = ((SessionConnection) cursor.connection).session.sessionId;
+
+            if (!Session.cursors.ContainsKey(sessionId))
+                Session.cursors[sessionId] = new Dictionary<int, BaseCursor>();
+
+            Session.cursors[sessionId][cursor.id] = cursor;
+        }
+
+        internal static void Clean() {
+            foreach (KeyValuePair<string, Dictionary<int, BaseCursor>> entry in Session.cursors) {
+                Session.Clean(entry.Key);
+            }
+        }
+
+        internal static bool Clean(string sessionID) {
+
+            BaseCursor cursor;
+            DateTime   now;
+            bool       stillOpenCursors;
+            double     delta;
+
+            if (!Session.cursors.ContainsKey(sessionID))
+                return false;
+
+            now = DateTime.Now;
+
+            stillOpenCursors = false;
+
+            foreach (KeyValuePair<int, BaseCursor> entry in Session.cursors[sessionID]) {
+
+                cursor = entry.Value;
+                delta = (now - cursor.lastAcessDate).TotalMinutes;
+
+                if (delta > 10) {
+                    cursor.Close();
+                    stillOpenCursors = true;
+                }
+            }
+
+            return stillOpenCursors;
+        }
+
+        /// <summary>
+        ///     Return the cursor corresponding to the ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static BaseCursor GetCursor(string sessionID, int id) {
+
+            if (!Session.HasCursor(sessionID, id))
+                return null;
+
+            return Session.cursors[sessionID][id];
+        }
+
+        /// <summary>
+        ///     Indicate if a cursor exist for the given session with the given ID
+        /// </summary>
+        /// <param name="sessionID"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static bool HasCursor(string sessionID, int id) {
+            if (!Session.cursors.ContainsKey(sessionID))
+                return false;
+
+            return Session.cursors[sessionID].ContainsKey(id);
+        }
+
+        /// <summary>
+        ///     Remove the cursor from the list of all cursors
+        /// </summary>
+        /// <param name="cursor"></param>
+        private static void RemoveCursor(BaseCursor cursor) {
+
+            string sessionId;
+            
+            sessionId = ((SessionConnection) cursor.connection).session.sessionId;
+
+            Session.cursors[sessionId].Remove(cursor.id);
+
+            if (Session.cursors[sessionId].Count == 0)
+                Session.cursors.Remove(sessionId);
+        }
+
 
         /******************** Methods ********************/        
 
@@ -159,7 +290,9 @@ namespace AdminLib.Auth {
         /// <param name="connection">Connection to drop</param>
         /// <param name="force">If false, then drop will fail if there is remaining opened cursors</param>
         /// <param name="commitTransactions"></param>
-        public bool DropConnection(db.AdminConnection connection, bool force=false, bool commitTransactions = false) {
+        public bool DropConnection ( SessionConnection connection
+                                   , bool              force              = false
+                                   , bool              commitTransactions = false) {
             bool closing;
 
             if (!this.HasConnection(connection.id))
@@ -184,11 +317,11 @@ namespace AdminLib.Auth {
             return this.user != null;
         }
 
-        public db.AdminConnection GetConnection ( string connectionID
-                                               , bool   autoCommit = true
-                                               , bool   keepAlive  = false) {
+        public db.Connection GetConnection ( string connectionID
+                                           , bool   autoCommit = true
+                                           , bool   keepAlive  = false) {
 
-            db.AdminConnection connection;
+            SessionConnection connection;
             bool              createConnection;
             bool              createSession;
             int?              user_id;
@@ -202,7 +335,7 @@ namespace AdminLib.Auth {
 
             if (createConnection)
                 // Creating a new connection
-                connection = new db.AdminConnection ( session    : this
+                connection = new SessionConnection ( session    : this
                                                    , autoCommit : autoCommit
                                                    , id         : connectionID);
             else
@@ -324,59 +457,49 @@ namespace AdminLib.Auth {
         /// <exception cref="Error.InvalidPassword">Raised when the user don't exist or the password is not corresponding</exception>
         public static void ConnectUser(BaseController controller, User user, string password) {
 
-            string            sqlProcedure;
-            OracleParameter[] parameters;
+            string           procedure;
+            QueryParameter[] parameters;
 
             // Creating the function
-            sqlProcedure    = @"PAK_AUTH.CONNECT_USER ( p_user_id       => :userId 
-                                                      , p_user_email    => :userEmail 
-                                                      , p_user_name     => :userName
-                                                      , p_user_password => :password)";
+            procedure    = "PAK_AUTH.CONNECT_USER";
 
             // Creating parameters
-            parameters    = new OracleParameter[4];
+            parameters    = new QueryParameter[4];
 
             // Id
-            parameters[0] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : user.id
-                                                , parameterName: ":userId"
-                                                , type         : OracleDbType.Int32);
-
-            parameters[0].IsNullable = true;
+            parameters[0] = new QueryParameter ( name     : "p_user_id"
+                                               , value    : user.id
+                                               , type     : DbType.Int32
+                                               , nullable : true);
 
             // Email
-            parameters[1] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : user.email
-                                                , parameterName: ":userEmail"
-                                                , type         : OracleDbType.Varchar2);
-
-            parameters[1].IsNullable = true;
+            parameters[1] = new QueryParameter ( name     : "p_user_email"
+                                               , value    : user.email
+                                               , type     : DbType.String
+                                               , nullable : true);
 
             // Username
-            parameters[2] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : user.username
-                                                , parameterName: ":userName"
-                                                , type         : OracleDbType.Varchar2);
-
-            parameters[2].IsNullable = true;
+            parameters[2] = new QueryParameter ( name     : "p_user_name"
+                                               , value    : user.username
+                                               , type     : DbType.String
+                                               , nullable : true);
 
             // Password
-            parameters[3] = new OracleParameter ( direction    : ParameterDirection.Input
-                                                , obj          : password
-                                                , parameterName: ":password"
-                                                , type         : OracleDbType.Varchar2);
+            parameters[3] = new QueryParameter ( name  : "p_user_password"
+                                               , value : password
+                                               , type  : DbType.String);
 
             // Trying to create the sesssion
             try {
                 // Creating the session and storing the value
-                controller.connection.ExecuteCode ( procedure : sqlProcedure
-                                                       , parameters   : parameters);
+                controller.connection.ExecuteProcedure ( procedure  : procedure
+                                                       , parameters : parameters);
 
             }
-            catch (db.Error.DisabledAccount) {
+            catch (App.QueryException.DisabledAccount) {
                 throw new Error.DisabledAccount();
             }
-            catch (db.Error.InvalidPassword) {
+            catch (App.QueryException.InvalidPassword) {
                 throw new Error.InvalidPassword();
             }
 
@@ -409,11 +532,11 @@ namespace AdminLib.Auth {
         /// </summary>
         public static void DisconnectUser(BaseController controller) {
 
-            string sqlProcedure;
+            string procedure;
 
-            sqlProcedure = "PAK_AUTH.DISCONNECT_USER()";
+            procedure = "PAK_AUTH.DISCONNECT_USER";
 
-            controller.connection.ExecuteCode ( procedure : sqlProcedure );
+            controller.connection.ExecuteProcedure ( procedure : procedure );
 
             controller.session.user = null;
         }
@@ -466,14 +589,14 @@ namespace AdminLib.Auth {
             return Session.sessions[sessionID];
         }
 
-        public static void LoadSessions(db.AdminConnection connection) {
+        internal static void LoadSessions(db.Connection connection) {
 
             SessionQueryResult[] dbItems;
-            string               sqlQuery;
+            string               query;
 
-            sqlQuery = "SELECT SESSION_ID, USER_ID, SESSION_START_DATE FROM APP_OPENED_SESSION";
+            query = "SELECT SESSION_ID, USER_ID, SESSION_START_DATE FROM APP_OPENED_SESSION";
 
-            dbItems = connection.Query<SessionQueryResult> ( sqlQuery   : sqlQuery );
+            dbItems = connection.Query<SessionQueryResult> ( query : query );
 
             // Creating each sessions
             for (int d = 0; d < dbItems.Length; d++) {
@@ -492,7 +615,7 @@ namespace AdminLib.Auth {
         ///     longer valid, then a new session ID will be provided
         /// </summary>
         /// <param name="controller"></param>
-        public static void SetSession(BaseController controller) {
+        internal static void SetSession(BaseController controller) {
 
             Session           session;
             string            sessionID;

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AdminLib.Database;
+using System.Data.Common;
 
-namespace AdminLib.Error {
-    public class ParameterNotFound : Exception {
+namespace AdminLib.App.Error {
+
+    public class ParameterNotFound : System.Exception {
+
     }
 }

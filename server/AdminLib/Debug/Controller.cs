@@ -45,7 +45,7 @@ namespace AdminLib.Debug {
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public Connection add(db.AdminConnection connection) {
+        public Connection add(db.Connection connection) {
             Connection debugConnection;
 
             debugConnection = new Connection(connection);

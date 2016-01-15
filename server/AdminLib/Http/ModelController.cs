@@ -3,9 +3,10 @@ using System.Net.Http;
 using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using AdminLib.Model;
-using db=AdminLib.Database;
-using Oracle.ManagedDataAccess.Client;
+using db = AdminLib.Database;
+using AdminLib.Data.Adapter;
 using AdminLib.Model.Interface;
+using AdminLib.Database.Error;
 
 namespace AdminLib.Http {
 
@@ -74,11 +75,7 @@ namespace AdminLib.Http {
             try {
                 item.Create ( connection : this.connection);
             }
-            catch (AdminLib.Database.Error.QueryException exception)
-            {
-                return this.InternalServerError(exception);
-            }
-            catch (OracleException exception) {
+            catch (QueryException exception) {
                 return this.InternalServerError(exception);
             }
             catch (Exception exception) {
@@ -123,10 +120,7 @@ namespace AdminLib.Http {
             try {
                 item.Delete(connection : this.connection);
             }
-            catch (db.Error.QueryException exception) {
-                return this.InternalServerError(exception);
-            }
-            catch (OracleException exception) {
+            catch (QueryException exception) {
                 return this.InternalServerError(exception);
             }
             catch (Exception exception) {
@@ -195,9 +189,6 @@ namespace AdminLib.Http {
                 items     = this.QueryItems();
             }
             catch (AdminLib.Database.Error.QueryException exception) {
-                return this.InternalServerError(exception);
-            }
-            catch (OracleException exception) {
                 return this.InternalServerError(exception);
             }
             catch (Exception exception) {
@@ -335,10 +326,7 @@ namespace AdminLib.Http {
                 item.Update ( connection  : connection
                             , emptyFields : emptyFields);
             }
-            catch (AdminLib.Database.Error.QueryException exception) {
-                return this.InternalServerError(exception);
-            }
-            catch (OracleException exception) {
+            catch (QueryException exception) {
                 return this.InternalServerError(exception);
             }
             catch (Exception exception) {

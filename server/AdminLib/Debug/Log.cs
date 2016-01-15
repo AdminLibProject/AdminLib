@@ -1,11 +1,8 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using db=AdminLib.Database;
+﻿using System;
+using db = AdminLib.Database;
 
-namespace AdminLib.Debug {
+namespace AdminLib.Debug
+{
 
     /// <summary>
     ///     Define a log entry in the debug
@@ -17,7 +14,6 @@ namespace AdminLib.Debug {
         public string                  message        { get; set; }
         public Level                   level          { get; set; }
         public Exception               error          { get; set; }
-        public OracleException         dbError        { get; set; }
         public db.Error.QueryException queryException { get; set; }
 
         /******************** Enum ********************/
@@ -40,13 +36,6 @@ namespace AdminLib.Debug {
             this.message = message;
             this.level   = level;
             this.error   = error;
-            this.time    = DateTime.Now;
-        }
-
-        public Log(string message, Level level=Level.normal, OracleException error = null) {
-            this.message = message;
-            this.level   = level;
-            this.dbError = error;
             this.time    = DateTime.Now;
         }
 

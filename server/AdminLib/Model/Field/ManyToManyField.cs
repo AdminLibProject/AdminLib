@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using AdminLib.Model.Model;
-using Oracle.ManagedDataAccess.Client;
 using System.Reflection;
+using System.Data;
 
-namespace AdminLib.Model.Field {
+namespace AdminLib.Model.Field
+{
     /// <summary>
     ///     A ManyToMany field is used when two tables are linked by a intermediate table.
     /// </summary>
@@ -149,8 +147,8 @@ namespace AdminLib.Model.Field {
             return value;
         }
 
-        public override OracleDbType GetDbType() {
-            return OracleDbType.Int32;
+        public override DbType GetDbType() {
+            return DbType.Int32;
         }
 
         public BaseField GetRefField() {

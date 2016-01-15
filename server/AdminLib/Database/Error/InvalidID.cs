@@ -1,21 +1,16 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Common;
 
 namespace AdminLib.Database.Error {
 
-    
     public class InvalidID : QueryException {
 
         //******************** Constants ********************/
-        public new const Code code = Code.INVALID_ID;
+        public string code = "AdminLib.Database.Error.InvalidID";
 
         //******************** Constructors ********************/
-        public InvalidID ( OracleException exception
+        public InvalidID ( DbException exception
                          , string query=null
-                         , OracleParameter[] parameters=null) :
+                         , QueryParameter[] parameters=null) :
             base(exception, query, parameters) { }
 
     }

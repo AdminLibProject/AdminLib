@@ -1,11 +1,8 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using db=AdminLib.Database;
+using db = AdminLib.Database;
 
-namespace AdminLib {
+namespace AdminLib.App {
     public class ApplicationParameter {
 
         /******************** Static Attributes ********************/
@@ -108,7 +105,7 @@ namespace AdminLib {
         /// <summary>
         ///     Load all parameters from the database
         /// </summary>
-        public static void loadParameters(db.AdminConnection connection) {
+        public static void loadParameters(db.Connection connection) {
 
             QueryStructure       dbParameter;
             QueryStructure[]     dbParameters;
@@ -116,7 +113,7 @@ namespace AdminLib {
             string               sqlQuery;
 
             sqlQuery     = "SELECT PARAM_GROUP, PARAM_NAME, PARAM_VALUE FROM APP_PARAMETER";
-            dbParameters = connection.Query<QueryStructure> ( sqlQuery   : sqlQuery );
+            dbParameters = connection.Query<QueryStructure> ( query : sqlQuery );
 
             for (int i = 0; i < dbParameters.Length; i++) {
 
