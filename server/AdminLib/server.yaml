@@ -1,0 +1,4 @@
+﻿applications:
+	- name: chinook
+	  path:
+		
