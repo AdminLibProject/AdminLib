@@ -21,7 +21,7 @@ namespace AdminLib.Model.Query
         ///     If no ID has been created (e.g because the item is not sequence based), then null is returned.
         /// </summary>
         /// <returns>Newly created ID</returns>
-        public static int? Create(IAdapter connection, AStructure model, object instance, string[] fields=null) {
+        public static int? Create(Connection connection, AStructure model, object instance, string[] fields=null) {
 
             Field.BaseField[]     fieldsToCreate;
             bool                  createWithSequence;
@@ -117,7 +117,7 @@ namespace AdminLib.Model.Query
         /// <param name="connection"></param>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        public static void Delete(IAdapter connection, AStructure model, object instance) {
+        public static void Delete(Connection connection, AStructure model, object instance) {
 
             QueryParameter        parameter;
             string                parameterName;
@@ -161,7 +161,7 @@ namespace AdminLib.Model.Query
         /// <param name="connection">Connection to use to make the SQL query</param>
         /// <param name="sequence">Sequence to use</param>
         /// <returns></returns>
-        public static int GetNextSequenceValue(IAdapter connection, string sequence) {
+        public static int GetNextSequenceValue(Connection connection, string sequence) {
 
             string    query;
             DataTable data;
@@ -181,7 +181,7 @@ namespace AdminLib.Model.Query
         /// <param name="instance">Instance that will be updated in the database</param>
         /// <param name="fields">Fields to update. If null, then all fields will be updated. NULL fields will not be updated</param>
         /// <param name="emptyFields">All given fields will be emptied in the database</param>
-        public static void Update ( IAdapter   connection
+        public static void Update ( Connection connection
                                   , AStructure model
                                   , object     instance
                                   , string[]   fields      = null

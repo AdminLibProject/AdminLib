@@ -59,7 +59,7 @@ namespace AdminLib.App.Auth {
             /// </summary>
             /// <param name="sessionID"></param>
             /// <returns></returns>
-            public static int? GetUserIdFromSession ( string            sessionID
+            public static int? GetUserIdFromSession ( string        sessionID
                                                     , db.Connection connection) {
                 string           sqlFunction;
                 QueryParameter[] parameters;

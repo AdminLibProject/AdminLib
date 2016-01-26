@@ -5,7 +5,7 @@ using System.Reflection;
 using AdminLib.Data.Store.Adapter;
 
 namespace AdminLib.Data.Query {
-    public class Connection : AdminLib.Data.Store.Adapter.IAdapter {
+    public class Connection {
 
         /******************** Static Attributes ********************/
         private static int              lastID = 0;
@@ -22,21 +22,40 @@ namespace AdminLib.Data.Query {
         public ConnectionState      state      { get; private set; }
 
         /******************** Constructors ********************/
-        public Connection ( bool autoCommit = true ) {
-
-            this.autoCommit = autoCommit;
-            this.uid        = Connection.lastID++;
-            this.state      = ConnectionState.Connecting;
-
-            this.debug = new Debug.Connection(this);
-
-            Connection.connections.Add(this);
+        public Connection ( bool autoCommit  = true) {
 
             // Initialize connection
             if (Connection.defaultAdapterManager == null)
                 throw new System.Exception("No default adapter manager defined");
 
             this.adapter = Connection.defaultAdapterManager.GetNewAdapter(autoCommit : autoCommit);
+
+            this.Initialize(autoCommit);
+        }
+
+        public Connection ( IAdapterManager adapterManager
+                          , bool            autoCommit = true) {
+
+            // Initialize adapter
+            this.adapter = adapterManager.GetNewAdapter(autoCommit : autoCommit);
+
+            this.Initialize(autoCommit);
+        }
+
+        public Connection (IAdapter adapter) {
+            this.adapter = adapter;
+
+            this.Initialize(autoCommit);
+        }
+
+        private void Initialize(bool autoCommit) {
+
+            this.autoCommit = autoCommit;
+            this.uid        = Connection.lastID++;
+            this.state      = ConnectionState.Connecting;
+            this.debug      = new Debug.Connection(this);
+
+            Connection.connections.Add(this);
         }
 
         /******************** Classes & structures ********************/

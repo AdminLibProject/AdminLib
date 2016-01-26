@@ -7,7 +7,8 @@ namespace AdminLib.Data.Store.Adapter {
 
     public interface IAdapterManager {
 
-        IAdapter GetNewAdapter(bool autoCommit);
+        IAdapter GetNewAdapter ( bool                  autoCommit
+                               , IAdapterConfiguration configuration = null);
 
     }
 

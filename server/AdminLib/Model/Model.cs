@@ -3,9 +3,10 @@ using AdminLib.Model.Query;
 using System;
 using AdminLib.Data.Store.Adapter;
 using AdminLib.Model.Interface;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model {
-    public abstract class Model<Self> : IModel, IQueryResult
+    public abstract class Model<Self> : IQueryResult
         where Self : Model<Self> {
 
         /******************** Static attributes ********************/
@@ -86,7 +87,7 @@ namespace AdminLib.Model {
             return sqlQuery;
         }
 
-        public static Self QueryItem(IAdapter connection, int id, string[] fields) {
+        public static Self QueryItem(Connection connection, int id, string[] fields) {
 
             return (Self) Model<Self>.QueryItem ( connection : connection
                                                       , id         : id
@@ -102,18 +103,18 @@ namespace AdminLib.Model {
         /// <param name="fields">API Name of the fields to return</param>
         /// <param name="orderBy"></param>
         /// <returns></returns>
-        public static Self[] QueryItems ( IAdapter connection
-                                        , Filter      filter
-                                        , string[]    fields
-                                        , OrderBy[]   orderBy) {
+        public static Self[] QueryItems ( Connection connection
+                                        , Filter     filter
+                                        , string[]   fields
+                                        , OrderBy[]  orderBy) {
 
             Object[] items;
             Self[]   results;
 
             items = Model<Self>.structure.QueryItems ( connection : connection
-                                                           , filter     : filter
-                                                           , fields     : fields
-                                                           , orderBy    : orderBy);
+                                                     , filter     : filter
+                                                     , fields     : fields
+                                                     , orderBy    : orderBy);
 
             results = new Self[items.Length];
 
@@ -123,7 +124,7 @@ namespace AdminLib.Model {
         }
 
         /******************** Methods ********************/
-        public virtual void Add<Model>(IAdapter connection, Model model, string path=null) {
+        public virtual void Add<Model>(Connection connection, Model model, string path=null) {
             throw new NotImplementedException();
         }
 
@@ -152,7 +153,7 @@ namespace AdminLib.Model {
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="fields"></param>
-        public virtual void Create(IAdapter connection, string[] fields=null) {
+        public virtual void Create(Connection connection, string[] fields=null) {
 
             int? id;
 
@@ -166,7 +167,7 @@ namespace AdminLib.Model {
                                             , value    : id);
         }
 
-        public virtual void Delete(IAdapter connection) {
+        public virtual void Delete(Connection connection) {
             DML.Delete ( connection : connection
                        , model      : Model<Self>.structure
                        , instance   : this);
@@ -182,11 +183,11 @@ namespace AdminLib.Model {
         /// <param name="connection"></param>
         /// <param name="model"></param>
         /// <param name="path"></param>
-        public virtual void Remove<Model>(IAdapter connection, Model model, string path=null) {
+        public virtual void Remove<Model>(Connection connection, Model model, string path=null) {
             throw new NotImplementedException();
         }
 
-        public virtual void Update(IAdapter connection, string[] fields=null, string[] emptyFields=null) {
+        public virtual void Update(Connection connection, string[] fields=null, string[] emptyFields=null) {
 
             DML.Update ( connection   : connection
                        , model       : Model<Self>.structure

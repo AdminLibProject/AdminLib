@@ -5,6 +5,7 @@ using AdminLib.Model.Query;
 using System.Collections;
 using System.Reflection;
 using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Query;
 
 namespace AdminLib.Model.Model {
 
@@ -427,7 +428,7 @@ namespace AdminLib.Model.Model {
                                          , path      : path);
         }
 
-        public Object QueryItem ( IAdapter       connection
+        public Object QueryItem ( Connection        connection
                                 , int               id
                                 , string[]          fields
                                 , Filter filter  = null) {
@@ -454,7 +455,7 @@ namespace AdminLib.Model.Model {
             return items[0];
         }
 
-        public Object QueryItem ( IAdapter       connection
+        public Object QueryItem ( Connection        connection
                                 , object            model
                                 , string[]          fields
                                 , Filter filter=null) {
@@ -488,10 +489,10 @@ namespace AdminLib.Model.Model {
             return items[0];
         }
 
-        public Object[] QueryItems ( IAdapter connection
-                                   , string[]    fields
-                                   , Filter      filter
-                                   , OrderBy[]   orderBy = null) {
+        public Object[] QueryItems ( Connection connection
+                                   , string[]   fields
+                                   , Filter     filter
+                                   , OrderBy[]  orderBy = null) {
 
             SqlQuery sqlQuery;
 

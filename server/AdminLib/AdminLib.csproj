@@ -91,12 +91,14 @@
     <Compile Include="Data\Query\Exception\InvalidData.cs" />
     <Compile Include="Data\Query\Exception\InvalidID.cs" />
     <Compile Include="Data\Query\Exception\UniqueConstraintViolated.cs" />
+    <Compile Include="Data\Store\Adapter\IAdapterConfiguration.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\Exception\AdapterException.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\Exception\SuccessWithCompilationError.cs" />
     <Compile Include="Data\Query\QueryParameter.cs" />
     <Compile Include="Data\Store\Adapter\IAdapterManager.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\Adapter.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\Cursor.cs" />
+    <Compile Include="Data\Store\Adapter\Oracle\AdapterConfiguration.cs" />
     <Compile Include="Http\BaseController.cs" />
     <Compile Include="Data\Query\BaseCursor.cs" />
     <Compile Include="Data\Query\Cursor.cs" />

@@ -441,7 +441,7 @@ namespace AdminLib.Model.Query {
                 return this.sqlQuery;
             }
 
-            public void Execute(IAdapter connection) {
+            public void Execute(Connection connection) {
 
                 object                    resultID;
                 string                    parentObjectId;
@@ -787,7 +787,7 @@ namespace AdminLib.Model.Query {
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public Object[] ExecuteQuery (IAdapter connection) {
+        public Object[] ExecuteQuery (Connection connection) {
 
             DataColumn                 column;
             Dictionary<string, Object> currentResult;

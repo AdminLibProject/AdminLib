@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using AdminLib.Model.Query;
+﻿using System.Data;
 using AdminLib.Data.Query;
 
-namespace AdminLib.Data.Store.Adapter {
+namespace AdminLib.Data.Store.Adapter
+{
     public interface IAdapter {
 
         ConnectionState state {get; }

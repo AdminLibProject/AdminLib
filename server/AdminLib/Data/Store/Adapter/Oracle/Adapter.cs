@@ -3,33 +3,31 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using AdminLib.Data.Query;
-using AdminLib.App;
 using AdminLib.Data.Store.Adapter.Oracle.Exception;
 
-namespace AdminLib.Data.Store.Adapter.Oracle
-{
+namespace AdminLib.Data.Store.Adapter.Oracle {
     public class Adapter : IAdapter {
 
         /******************** Static Attributes ********************/
-        public  static Connection       serverConnection { get; private set; }
-        public  static List<Connection> connections = new List<Connection>();
-
+        public  static Connection           serverConnection { get; private set; }
+        public  static List<Connection>     connections = new List<Connection>();
+        public  static AdapterConfiguration defaultConfiguration;
 
         /******************** Attributes ********************/
-        public  bool                autoCommit { get; private set; }
-        private bool                closeASAP    = false;
-        private Connection          connection;
-        public  Debug.Connection    debug { get; private set; }
-        public  string              id    { get; private set; }
-        private OracleConnection    oracleConnection;
-        private List<BaseCursor>    openedCursors = new List<BaseCursor>();
-        public  int                 uid {get; private set; }
-        public  ConnectionState     state {
+        public  bool                 autoCommit { get; private set; }
+        private bool                 closeASAP    = false;
+        public  AdapterConfiguration configuration { get; private set; }
+        private Connection           connection;
+        public  Debug.Connection     debug { get; private set; }
+        public  string               id    { get; private set; }
+        private OracleConnection     oracleConnection;
+        private List<BaseCursor>     openedCursors = new List<BaseCursor>();
+        public  int                  uid {get; private set; }
+        public  ConnectionState      state {
 
             get {
                 return this.oracleConnection.State;
             }
-
 
         }
 
@@ -55,15 +53,24 @@ namespace AdminLib.Data.Store.Adapter.Oracle
         }
 
         /******************** Static Methods ********************/
+        /// <summary>
+        ///     Create a new oracle connection using the default configuration
+        /// </summary>
+        /// <returns></returns>
         internal static OracleConnection GetNewOracleConnection() {
             OracleConnection oracleConnection;
 
-            oracleConnection = new OracleConnection(Config.defaultConnectionString);
+            oracleConnection = new OracleConnection(""); // TODO
             oracleConnection.Open();
 
             return oracleConnection;
         }
 
+        /// <summary>
+        ///     Convert the query parameter to an oracle parameter
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         internal static OracleParameter ToOracleParameter(QueryParameter parameter) {
 
             OracleParameter oracleParameter;
@@ -88,7 +95,6 @@ namespace AdminLib.Data.Store.Adapter.Oracle
         }
 
         /******************** Methods ********************/
-
         private string BuildQuery(string procedure, Dictionary<string, Object> parameters) {
 
             string query;
