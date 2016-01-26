@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using AdminLib.Data.Query;
 using AdminLib.Model.Model;
+using AdminLib.Model.Query;
 
 namespace AdminLib.Data.Store.Adapter {
     public interface IAdapter {
@@ -61,6 +62,11 @@ namespace AdminLib.Data.Store.Adapter {
                          , QueryParameter[] parameters = null
                          , bool?            bindByName = null
                          , bool?            commit     = null);
+
+        object[] QueryItems ( AStructure model
+                            , Filter     filter
+                            , string[]   fields
+                            , OrderBy[]  orderBy);
 
         void RegisterCursor (BaseCursor cursor);
 

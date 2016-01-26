@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using AdminLib.Model.Model;
 using AdminLib.Model.Field;
-using AdminLib.Data.Store.Adapter;
 using AdminLib.Data.Query;
+using AdminLib.Model.Query;
+using AdminLib.Model;
+using Field = AdminLib.Model.Field;
 
-namespace AdminLib.Model.Query {
+namespace AdminLib.Data.Store.Adapter
+{
 
     using System.Data;
     using System.Collections;
@@ -15,7 +16,7 @@ namespace AdminLib.Model.Query {
     ///     This class is small, but very complexe.
     ///     Sorry for that. I try to add a maximum of comment, but still... don't discourage ;-)
     /// </summary>
-    public class SqlQuery {
+    internal class SqlQuery {
 
         /******************** Attributes ********************/
         public  List<Path>                            fields          = new List<Path>();
@@ -29,7 +30,7 @@ namespace AdminLib.Model.Query {
         public string query {get; private set; }
 
         private List<SelectColumn>                    selectColumns;
-        private Dictionary<string, SubQuery>          subQueries = new Dictionary<string,SubQuery>();
+        private Dictionary<string, SubQuery>          subQueries      = new Dictionary<string,SubQuery>();
 
         public QueryParameter[] parameters {
             get {
@@ -441,7 +442,7 @@ namespace AdminLib.Model.Query {
                 return this.sqlQuery;
             }
 
-            public void Execute(Connection connection) {
+            public void Execute(SQLAdapter adapter) {
 
                 object                    resultID;
                 string                    parentObjectId;
@@ -450,7 +451,7 @@ namespace AdminLib.Model.Query {
 
                 this.BuildSqlQuery();
 
-                results = this.sqlQuery.ExecuteQuery(connection : connection);
+                results = this.sqlQuery.ExecuteQuery(adapter : adapter);
 
                 instancesList = new Dictionary<string, IList>();
 
@@ -782,12 +783,12 @@ namespace AdminLib.Model.Query {
         /// <summary>
         ///     Executing the query.
         ///     The query has been builded during the creation of the SqlQuery instance.
-        ///     It's executed using the given connection and the result is a DataTable.
+        ///     It's executed using the given adapter and the result is a DataTable.
         ///     The query will convert each row of the datatable to an instance of the model.
         /// </summary>
-        /// <param name="connection"></param>
+        /// <param name="adapter"></param>
         /// <returns></returns>
-        public Object[] ExecuteQuery (Connection connection) {
+        public Object[] ExecuteQuery (SQLAdapter adapter) {
 
             DataColumn                 column;
             Dictionary<string, Object> currentResult;
@@ -804,8 +805,8 @@ namespace AdminLib.Model.Query {
             FromTable                  table;
             Object                     value;
 
-            dataTable = connection.QueryDataTable ( query   : this.query
-                                                  , parameters : this.parameters);
+            dataTable = adapter.QueryDataTable ( query      : this.query
+                                               , parameters : this.parameters);
 
             nbRows = dataTable.Rows.Count;
 
@@ -907,7 +908,7 @@ namespace AdminLib.Model.Query {
                     subQuery.Add(filter);
                 }
 
-                subQuery.Execute(connection);
+                subQuery.Execute(adapter);
             }
 
             return results.ToArray();

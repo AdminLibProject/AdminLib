@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Field=AdminLib.Model.Field;
+using Field = AdminLib.Model.Field;
 using AdminLib.Data.Query;
 using AdminLib.Model.Model;
 using System.Data;
+using AdminLib.Model.Query;
 
 namespace AdminLib.Data.Store.Adapter {
     public abstract class SQLAdapter : IAdapter {
@@ -172,6 +173,23 @@ namespace AdminLib.Data.Store.Adapter {
             return Convert.ToInt32(data.Rows[0][0]);
         }
 
+        public object[] QueryItems ( AStructure model
+                                   , Filter     filter
+                                   , string[]   fields
+                                   , OrderBy[]  orderBy) {
+
+            SqlQuery sqlQuery;
+
+            sqlQuery = new SqlQuery ( model   : model
+                                    , fields  : fields
+                                    , filter  : filter
+                                    , sorting : orderBy);
+
+            Object[] items = sqlQuery.ExecuteQuery(this);
+
+            return items;
+        }
+
         /// <summary>
         ///     Update the corresponding row in the database.
         /// </summary>
@@ -273,7 +291,7 @@ namespace AdminLib.Data.Store.Adapter {
         public abstract bool Close(bool force = false, bool? commitTransactions = default(bool?));
         public abstract void Commit();
         public abstract void ExecuteDML(string query, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
-        public abstract T ExecuteFunction<T>(string function, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
+        public abstract T    ExecuteFunction<T>(string function, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
         public abstract void ExecuteProcedure(string procedure, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
         public abstract void ExecuteCode(string code, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
         public abstract void RegisterCursor(BaseCursor cursor);

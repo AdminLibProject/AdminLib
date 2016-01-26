@@ -494,16 +494,11 @@ namespace AdminLib.Model.Model {
                                    , Filter     filter
                                    , OrderBy[]  orderBy = null) {
 
-            SqlQuery sqlQuery;
+            return connection.QueryItems ( model   : this
+                                         , fields  : fields
+                                         , filter  : filter
+                                         , orderBy : orderBy);
 
-            sqlQuery = new SqlQuery ( model   : this
-                                    , fields  : fields
-                                    , filter  : filter
-                                    , sorting : orderBy);
-
-            Object[] items = sqlQuery.ExecuteQuery(connection);
-
-            return items;
         }
 
 

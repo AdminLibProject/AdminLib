@@ -75,18 +75,6 @@ namespace AdminLib.Model {
             return structure;
         }
 
-        public static SqlQuery GetQuery(Filter filter, string[] fields, OrderBy[] orderBy) {
-
-            SqlQuery sqlQuery;
-
-            sqlQuery = new SqlQuery ( model   : Model<Self>.structure
-                                    , fields  : fields
-                                    , filter  : filter
-                                    , sorting : orderBy);
-
-            return sqlQuery;
-        }
-
         public static Self QueryItem(Connection connection, int id, string[] fields) {
 
             return (Self) Model<Self>.QueryItem ( connection : connection

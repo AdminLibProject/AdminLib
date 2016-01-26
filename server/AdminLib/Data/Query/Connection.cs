@@ -4,6 +4,7 @@ using System.Data;
 using System.Reflection;
 using AdminLib.Data.Store.Adapter;
 using AdminLib.Model.Model;
+using AdminLib.Model.Query;
 
 namespace AdminLib.Data.Query {
     public class Connection {
@@ -347,6 +348,18 @@ namespace AdminLib.Data.Query {
         /// <returns></returns>
         public bool IsAutoCommitEnabled() {
             return this.autoCommit;
+        }
+
+        public object[] QueryItems ( AStructure model
+                                   , string[]   fields
+                                   , Filter     filter
+                                   , OrderBy[]  orderBy = null) {
+
+            return this.adapter.QueryItems ( model   : model
+                                           , fields  : fields
+                                           , filter  : filter
+                                           , orderBy : orderBy);
+
         }
 
         public void RegisterCursor(BaseCursor cursor) {

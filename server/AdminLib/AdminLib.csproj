@@ -100,6 +100,7 @@
     <Compile Include="Data\Store\Adapter\Oracle\Cursor.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\AdapterConfiguration.cs" />
     <Compile Include="Data\Store\Adapter\SQLAdapter.cs" />
+    <Compile Include="Data\Store\Adapter\SqlQuery.cs" />
     <Compile Include="Http\BaseController.cs" />
     <Compile Include="Data\Query\BaseCursor.cs" />
     <Compile Include="Data\Query\Cursor.cs" />
@@ -171,13 +172,11 @@
     <Compile Include="Model\Model\VirtualStructure.cs" />
     <Compile Include="Model\NumberField.cs" />
     <Compile Include="Model\OneToOneField.cs" />
-    <Compile Include="Model\Query\DML.cs" />
     <Compile Include="Model\Query\FieldFilter.cs" />
     <Compile Include="Model\Query\Filter.cs" />
     <Compile Include="Model\Query\FunctionResult.cs" />
     <Compile Include="Model\Query\OrderBy.cs" />
     <Compile Include="Model\Query\Path.cs" />
-    <Compile Include="Model\Query\SqlQuery.cs" />
     <Compile Include="Model\TimeStampField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
