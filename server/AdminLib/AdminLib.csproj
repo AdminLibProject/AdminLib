@@ -99,6 +99,7 @@
     <Compile Include="Data\Store\Adapter\Oracle\Adapter.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\Cursor.cs" />
     <Compile Include="Data\Store\Adapter\Oracle\AdapterConfiguration.cs" />
+    <Compile Include="Data\Store\Adapter\SQLAdapter.cs" />
     <Compile Include="Http\BaseController.cs" />
     <Compile Include="Data\Query\BaseCursor.cs" />
     <Compile Include="Data\Query\Cursor.cs" />

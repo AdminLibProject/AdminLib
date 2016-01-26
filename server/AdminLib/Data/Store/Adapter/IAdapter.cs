@@ -1,15 +1,25 @@
 ﻿using System.Data;
 using AdminLib.Data.Query;
+using AdminLib.Model.Model;
 
-namespace AdminLib.Data.Store.Adapter
-{
+namespace AdminLib.Data.Store.Adapter {
     public interface IAdapter {
+
+        // TODO : remove default parameter values : this interface is not meant to be used by "final" users.
 
         ConnectionState state {get; }
 
         DataTable QueryDataTable ( string           query
                                  , QueryParameter[] parameters = null
                                  , bool?            bindByName = null);
+
+        int? Create(AStructure model, object instance, string[] fields=null);
+        void Delete(AStructure model, object instance);
+
+        void Update ( AStructure model
+                    , object     instance
+                    , string[]   fields      = null
+                    , string[]   emptyFields = null);
 
         /// <summary>
         /// Close the connection.

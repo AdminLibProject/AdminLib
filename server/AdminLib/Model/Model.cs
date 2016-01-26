@@ -157,10 +157,9 @@ namespace AdminLib.Model {
 
             int? id;
 
-            id = DML.Create ( connection : connection
-                            , model      : this.model
-                            , instance   : this
-                            , fields     : fields);
+            id = connection.Create ( model      : this.model
+                                   , instance   : this
+                                   , fields     : fields);
 
             if (this.model.sequenceBased && id != null)
                 this.model.IdField.SetValue ( instance : this
@@ -168,9 +167,8 @@ namespace AdminLib.Model {
         }
 
         public virtual void Delete(Connection connection) {
-            DML.Delete ( connection : connection
-                       , model      : Model<Self>.structure
-                       , instance   : this);
+            connection.Delete ( model      : Model<Self>.structure
+                              , instance   : this);
         }
 
         /// <summary>
@@ -189,11 +187,10 @@ namespace AdminLib.Model {
 
         public virtual void Update(Connection connection, string[] fields=null, string[] emptyFields=null) {
 
-            DML.Update ( connection   : connection
-                       , model       : Model<Self>.structure
-                       , instance    : this
-                       , fields      : fields
-                       , emptyFields : emptyFields);
+            connection.Update ( model       : Model<Self>.structure
+                              , instance    : this
+                              , fields      : fields
+                              , emptyFields : emptyFields);
 
         }
     }

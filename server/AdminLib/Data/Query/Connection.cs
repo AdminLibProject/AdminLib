@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using AdminLib.Data.Store.Adapter;
+using AdminLib.Model.Model;
 
 namespace AdminLib.Data.Query {
     public class Connection {
@@ -142,6 +143,35 @@ namespace AdminLib.Data.Query {
         private void Commit(bool? condition) {
             if (condition == true || (condition == null && this.autoCommit))
                 this.Commit();
+        }
+
+        /// <summary>
+        ///     Reccord the instance into the store.
+        ///     If the model is sequence based and the instance has no ID provided, then the function
+        ///     will create a new ID using the sequence.
+        ///     The newly created ID will be return.
+        ///
+        ///     If no ID has been created (e.g because the item is not sequence based), then null is returned.
+        /// </summary>
+        /// <returns>Newly created ID</returns>
+        public int? Create (AStructure model, object instance, string[] fields=null) {
+
+            return this.adapter.Create ( model    : model
+                                       , instance : instance
+                                       , fields   : fields);
+
+        }
+
+        /// <summary>
+        ///     Delete in the database the reccord corresponding to the instance.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="instance"></param>
+        public void Delete(AStructure model, object instance) {
+
+            this.adapter.Delete ( model    : model
+                                , instance : instance);
+
         }
 
         /// <summary>
@@ -436,6 +466,26 @@ namespace AdminLib.Data.Query {
 
         public void UnregisterCursor(BaseCursor cursor) {
             this.adapter.UnregisterCursor(cursor);
+        }
+
+        /// <summary>
+        ///     Update the corresponding row in the database.
+        /// </summary>
+        /// <param name="connection">Connection to use</param>
+        /// <param name="model">Model corresponding to the instance</param>
+        /// <param name="instance">Instance that will be updated in the database</param>
+        /// <param name="fields">Fields to update. If null, then all fields will be updated. NULL fields will not be updated</param>
+        /// <param name="emptyFields">All given fields will be emptied in the database</param>
+        public void Update ( AStructure model
+                           , object     instance
+                           , string[]   fields      = null
+                           , string[]   emptyFields = null) {
+
+            this.adapter.Update ( model       : model
+                                , instance    : instance
+                                , fields      : fields
+                                , emptyFields : emptyFields);
+
         }
 
     }

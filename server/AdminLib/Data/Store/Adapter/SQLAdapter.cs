@@ -1,14 +1,16 @@
-﻿using AdminLib.Model.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using AdminLib.Data.Store.Adapter;
+using System.Web;
+using Field=AdminLib.Model.Field;
 using AdminLib.Data.Query;
+using AdminLib.Model.Model;
+using System.Data;
 
-namespace AdminLib.Model.Query
-{
-    internal static class DML {
+namespace AdminLib.Data.Store.Adapter {
+    public abstract class SQLAdapter : IAdapter {
+
+        public abstract ConnectionState state { get; }
 
         /******************** Methods ********************/
 
@@ -21,7 +23,7 @@ namespace AdminLib.Model.Query
         ///     If no ID has been created (e.g because the item is not sequence based), then null is returned.
         /// </summary>
         /// <returns>Newly created ID</returns>
-        public static int? Create(Connection connection, AStructure model, object instance, string[] fields=null) {
+        public int? Create(AStructure model, object instance, string[] fields=null) {
 
             Field.BaseField[]     fieldsToCreate;
             bool                  createWithSequence;
@@ -60,8 +62,7 @@ namespace AdminLib.Model.Query
             parameters = new List<QueryParameter>();
 
             if (createWithSequence)
-                id = DML.GetNextSequenceValue ( connection : connection
-                                              , sequence   : model.IdField.sequence);
+                id = this.GetNextSequenceValue ( sequence : model.IdField.sequence);
 
             // Building the columnClause and the valueClause.
             foreach (Field.BaseField field in fieldsToCreate) {
@@ -86,7 +87,7 @@ namespace AdminLib.Model.Query
                 }
 
                 parameter = new QueryParameter ( name  : parameterName
-                                               , value : value);
+                                                , value : value);
 
                 parameters.Add(parameter);
             }
@@ -105,8 +106,8 @@ namespace AdminLib.Model.Query
                     + " SELECT " + valueClause
                     + "   FROM " + fromClause;
 
-            connection.ExecuteDML ( query      : query
-                                  , parameters : parameters.ToArray());
+            this.ExecuteDML ( query      : query
+                            , parameters : parameters.ToArray());
 
             return id;
         }
@@ -114,10 +115,9 @@ namespace AdminLib.Model.Query
         /// <summary>
         ///     Delete in the database the reccord corresponding to the instance.
         /// </summary>
-        /// <param name="connection"></param>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        public static void Delete(Connection connection, AStructure model, object instance) {
+        public void Delete(AStructure model, object instance) {
 
             QueryParameter        parameter;
             string                parameterName;
@@ -141,7 +141,7 @@ namespace AdminLib.Model.Query
                     whereClause  += field.dbColumn + "= :" + parameterName + " AND ";
 
                 parameter = new QueryParameter ( name  : parameterName
-                                               , value : value);
+                                                , value : value);
 
                 parameters.Add(parameter);
             }
@@ -151,24 +151,23 @@ namespace AdminLib.Model.Query
             query =   "DELETE FROM " + model.dbTable
                     + " WHERE " + whereClause;
 
-            connection.ExecuteDML ( query      : query
-                                  , parameters : parameters.ToArray());
+            this.ExecuteDML ( query      : query
+                            , parameters : parameters.ToArray());
         }
 
         /// <summary>
         ///     Return the NEXTVAL of the given sequence.
         /// </summary>
-        /// <param name="connection">Connection to use to make the SQL query</param>
         /// <param name="sequence">Sequence to use</param>
         /// <returns></returns>
-        public static int GetNextSequenceValue(Connection connection, string sequence) {
+        private int GetNextSequenceValue(string sequence) {
 
             string    query;
             DataTable data;
 
             query = "SELECT TO_NUMBER(" + sequence + ".NEXTVAL) FROM DUAL";
 
-            data = connection.QueryDataTable(query : query);
+            data = this.QueryDataTable(query : query);
 
             return Convert.ToInt32(data.Rows[0][0]);
         }
@@ -181,11 +180,10 @@ namespace AdminLib.Model.Query
         /// <param name="instance">Instance that will be updated in the database</param>
         /// <param name="fields">Fields to update. If null, then all fields will be updated. NULL fields will not be updated</param>
         /// <param name="emptyFields">All given fields will be emptied in the database</param>
-        public static void Update ( Connection connection
-                                  , AStructure model
-                                  , object     instance
-                                  , string[]   fields      = null
-                                  , string[]   emptyFields = null) {
+        public void Update ( AStructure model
+                           , object     instance
+                           , string[]   fields      = null
+                           , string[]   emptyFields = null) {
 
             Field.BaseField[]    fieldsToUpdate;
             Field.BaseField[]    fieldsToEmpty;
@@ -238,7 +236,7 @@ namespace AdminLib.Model.Query
                 }
 
                 parameter = new QueryParameter ( name  : parameterName
-                                               , value : value);
+                                                , value : value);
 
                 parameters.Add(parameter);
             }
@@ -266,10 +264,20 @@ namespace AdminLib.Model.Query
                     + " SET "   + setClause
                     + " WHERE " + whereClause;
 
-            connection.ExecuteDML ( query      : query
-                                  , parameters : parameters.ToArray());
+            this.ExecuteDML ( query      : query
+                            , parameters : parameters.ToArray());
 
         }
 
+        public abstract DataTable QueryDataTable(string query, QueryParameter[] parameters = null, bool? bindByName = default(bool?));
+        public abstract bool Close(bool force = false, bool? commitTransactions = default(bool?));
+        public abstract void Commit();
+        public abstract void ExecuteDML(string query, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
+        public abstract T ExecuteFunction<T>(string function, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
+        public abstract void ExecuteProcedure(string procedure, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
+        public abstract void ExecuteCode(string code, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
+        public abstract void RegisterCursor(BaseCursor cursor);
+        public abstract void UnregisterCursor(BaseCursor cursor);
+        public abstract void Rollback();
     }
 }

@@ -6,7 +6,7 @@ using AdminLib.Data.Query;
 using AdminLib.Data.Store.Adapter.Oracle.Exception;
 
 namespace AdminLib.Data.Store.Adapter.Oracle {
-    public class Adapter : IAdapter {
+    public class Adapter : SQLAdapter {
 
         /******************** Static Attributes ********************/
         public  static Connection           serverConnection { get; private set; }
@@ -23,7 +23,8 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         private OracleConnection     oracleConnection;
         private List<BaseCursor>     openedCursors = new List<BaseCursor>();
         public  int                  uid {get; private set; }
-        public  ConnectionState      state {
+
+        public  override ConnectionState state {
 
             get {
                 return this.oracleConnection.State;
@@ -118,7 +119,7 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// </summary>
         /// <param name="force">If true, then the connection will be closed, even if there is opened cursors</param>
         /// <param name="commitTransactions">If true, then all remaining transactions will be commited</param>
-        public bool Close(bool force = false, bool? commitTransactions = null) {
+        public override bool Close(bool force = false, bool? commitTransactions = null) {
 
             if (this.oracleConnection.State == ConnectionState.Closed)
                 return true;
@@ -162,7 +163,7 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// <summary>
         ///     Commit all performed transactions.
         /// </summary>
-        public void Commit() {
+        public override void Commit() {
 
             if (this.transaction == null)
                 return;
@@ -180,10 +181,10 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// <param name="parameters"></param>
         /// <param name="bindByName"></param>
         /// <param name="commit">If null, the commit will be done if the autocommit is enabled</param>
-        public void ExecuteDML ( string           query
-                               , QueryParameter[] parameters = null
-                               , bool?            bindByName = null
-                               , bool?            commit     = null) {
+        public override void ExecuteDML ( string           query
+                                        , QueryParameter[] parameters = null
+                                        , bool?            bindByName = null
+                                        , bool?            commit     = null) {
 
             OracleDataAdapter adapter;
             OracleCommand     command;
@@ -222,10 +223,10 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// </summary>
         /// <param name="code"></param>
         /// <param name="parameters"></param>
-        public void ExecuteCode ( string           code
-                                , QueryParameter[] parameters = null
-                                , bool?            bindByName = null
-                                , bool?            commit     = null) {
+        public override void ExecuteCode ( string           code
+                                         , QueryParameter[] parameters = null
+                                         , bool?            bindByName = null
+                                         , bool?            commit     = null) {
 
             OracleDataAdapter adapter;
             OracleCommand     command;
@@ -264,10 +265,10 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// <param name="function">Function to execute</param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public T ExecuteFunction<T> ( string           function
-                                    , QueryParameter[] parameters = null
-                                    , bool?            bindByName = null
-                                    , bool?            commit     = null) {
+        public override T ExecuteFunction<T> ( string           function
+                                             , QueryParameter[] parameters = null
+                                             , bool?            bindByName = null
+                                             , bool?            commit     = null) {
 
             QueryParameter   outputParameter;
             QueryParameter   parameter;
@@ -343,10 +344,10 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// <param name="function">Function to execute</param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public void ExecuteProcedure ( string           procedure
-                                     , QueryParameter[] parameters = null
-                                     , bool?            bindByName = null
-                                     , bool?            commit     = null) {
+        public override void ExecuteProcedure ( string           procedure
+                                              , QueryParameter[] parameters = null
+                                              , bool?            bindByName = null
+                                              , bool?            commit     = null) {
 
             QueryParameter   parameter;
             string           code;
@@ -399,18 +400,18 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         }
 
 
-        public OracleCommand getCommand(string sqlQuery) {
+        internal OracleCommand getCommand(string sqlQuery) {
             return new OracleCommand(sqlQuery, this.oracleConnection);
         }
 
-        public void RegisterCursor(BaseCursor cursor) {
+        public override void RegisterCursor(BaseCursor cursor) {
             this.openedCursors.Add(cursor);
         }
 
         /// <summary>
         /// Rollback the transaction.
         /// </summary>
-        public void Rollback() {
+        public override void Rollback() {
 
             if (this.transaction == null)
                 return;
@@ -421,7 +422,7 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
             this.transaction = this.oracleConnection.BeginTransaction();
         }
 
-        public void UnregisterCursor(BaseCursor cursor) {
+        public override void UnregisterCursor(BaseCursor cursor) {
             this.openedCursors.Remove(cursor);
 
             // If the connection has been previously asked to be close
@@ -440,9 +441,9 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// <param name="connection">Connection to use for execution</param>
         /// <param name="parameters">Parameters of the query</param>
         /// <returns></returns>
-        public DataTable QueryDataTable ( string           sqlQuery
-                                        , QueryParameter[] parameters = null
-                                        , bool?            bindByName = null) {
+        public override DataTable QueryDataTable ( string           sqlQuery
+                                                 , QueryParameter[] parameters = null
+                                                 , bool?            bindByName = null) {
 
             OracleDataAdapter adapter;
             OracleCommand     command;
