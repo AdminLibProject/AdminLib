@@ -117,7 +117,7 @@ namespace AdminLib.App.Auth {
             /***** Constructors *****/
             public SessionConnection ( bool    autoCommit
                                      , string  id
-                                     , Session session) : base (autoCommit) {
+                                     , Session session) : base () {
 
                 this.id      = id;
                 this.session = session;

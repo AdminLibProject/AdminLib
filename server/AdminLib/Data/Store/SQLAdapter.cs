@@ -8,10 +8,19 @@ using AdminLib.Model.Model;
 using System.Data;
 using AdminLib.Model.Query;
 
-namespace AdminLib.Data.Store.Adapter {
-    public abstract class SQLAdapter : IAdapter {
+namespace AdminLib.Data.Store {
+    public abstract class SQLAdapter : Adapter {
 
         public abstract ConnectionState state { get; }
+
+        /******************** Constructor ********************/
+        public SQLAdapter ( AdapterConfiguration configuration
+                          , bool                 autoCommit) : base ( configuration
+                                                                    , autoCommit) {}
+
+        public SQLAdapter ( string     configuration
+                          , bool       autoCommit) : base ( configuration
+                                                          , autoCommit) {}
 
         /******************** Methods ********************/
 
@@ -24,7 +33,7 @@ namespace AdminLib.Data.Store.Adapter {
         ///     If no ID has been created (e.g because the item is not sequence based), then null is returned.
         /// </summary>
         /// <returns>Newly created ID</returns>
-        public int? Create(AStructure model, object instance, string[] fields=null) {
+        public override int? Create(AStructure model, object instance, string[] fields=null) {
 
             Field.BaseField[]     fieldsToCreate;
             bool                  createWithSequence;
@@ -118,7 +127,7 @@ namespace AdminLib.Data.Store.Adapter {
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        public void Delete(AStructure model, object instance) {
+        public override void Delete(AStructure model, object instance) {
 
             QueryParameter        parameter;
             string                parameterName;
@@ -173,10 +182,10 @@ namespace AdminLib.Data.Store.Adapter {
             return Convert.ToInt32(data.Rows[0][0]);
         }
 
-        public object[] QueryItems ( AStructure model
-                                   , Filter     filter
-                                   , string[]   fields
-                                   , OrderBy[]  orderBy) {
+        public override object[] QueryItems ( AStructure model
+                                            , Filter     filter
+                                            , string[]   fields
+                                            , OrderBy[]  orderBy) {
 
             SqlQuery sqlQuery;
 
@@ -198,10 +207,10 @@ namespace AdminLib.Data.Store.Adapter {
         /// <param name="instance">Instance that will be updated in the database</param>
         /// <param name="fields">Fields to update. If null, then all fields will be updated. NULL fields will not be updated</param>
         /// <param name="emptyFields">All given fields will be emptied in the database</param>
-        public void Update ( AStructure model
-                           , object     instance
-                           , string[]   fields      = null
-                           , string[]   emptyFields = null) {
+        public override void Update ( AStructure model
+                                    , object     instance
+                                    , string[]   fields      = null
+                                    , string[]   emptyFields = null) {
 
             Field.BaseField[]    fieldsToUpdate;
             Field.BaseField[]    fieldsToEmpty;
@@ -287,15 +296,5 @@ namespace AdminLib.Data.Store.Adapter {
 
         }
 
-        public abstract DataTable QueryDataTable(string query, QueryParameter[] parameters = null, bool? bindByName = default(bool?));
-        public abstract bool Close(bool force = false, bool? commitTransactions = default(bool?));
-        public abstract void Commit();
-        public abstract void ExecuteDML(string query, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
-        public abstract T    ExecuteFunction<T>(string function, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
-        public abstract void ExecuteProcedure(string procedure, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
-        public abstract void ExecuteCode(string code, QueryParameter[] parameters = null, bool? bindByName = default(bool?), bool? commit = default(bool?));
-        public abstract void RegisterCursor(BaseCursor cursor);
-        public abstract void UnregisterCursor(BaseCursor cursor);
-        public abstract void Rollback();
     }
 }

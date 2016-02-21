@@ -69,7 +69,7 @@
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Properties\PublishProfiles\Seferino.pubxml" />
     <Content Include="web.config" />
-    <Content Include="server.yaml" />
+    <Content Include="server.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -91,26 +91,26 @@
     <Compile Include="Data\Query\Exception\InvalidData.cs" />
     <Compile Include="Data\Query\Exception\InvalidID.cs" />
     <Compile Include="Data\Query\Exception\UniqueConstraintViolated.cs" />
-    <Compile Include="Data\Store\Adapter\IAdapterConfiguration.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Exception\AdapterException.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Exception\SuccessWithCompilationError.cs" />
+    <Compile Include="Data\Store\AdapterConfiguration.cs" />
+    <Compile Include="Data\Store\AdapterDeclaration.cs" />
+    <Compile Include="Data\Store\Oracle\Exception\AdapterException.cs" />
+    <Compile Include="Data\Store\Oracle\Exception\SuccessWithCompilationError.cs" />
     <Compile Include="Data\Query\QueryParameter.cs" />
-    <Compile Include="Data\Store\Adapter\IAdapterManager.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Adapter.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Cursor.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\AdapterConfiguration.cs" />
-    <Compile Include="Data\Store\Adapter\SQLAdapter.cs" />
-    <Compile Include="Data\Store\Adapter\SqlQuery.cs" />
+    <Compile Include="Data\Store\Oracle\Adapter.cs" />
+    <Compile Include="Data\Store\Oracle\Cursor.cs" />
+    <Compile Include="Data\Store\Oracle\Configuration.cs" />
+    <Compile Include="Data\Store\SQLAdapter.cs" />
+    <Compile Include="Data\Store\SqlQuery.cs" />
     <Compile Include="Http\BaseController.cs" />
     <Compile Include="Data\Query\BaseCursor.cs" />
     <Compile Include="Data\Query\Cursor.cs" />
     <Compile Include="Data\Query\CursorResult.cs" />
     <Compile Include="Data\Query\Connection.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Exception\Code.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Exception\DependencyError.cs" />
+    <Compile Include="Data\Store\Oracle\Exception\Code.cs" />
+    <Compile Include="Data\Store\Oracle\Exception\DependencyError.cs" />
     <Compile Include="App\QueryException\DisabledAccount.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Exception\DuplicateKey.cs" />
-    <Compile Include="Data\Store\Adapter\Oracle\Exception\InsufficientPrivileges.cs" />
+    <Compile Include="Data\Store\Oracle\Exception\DuplicateKey.cs" />
+    <Compile Include="Data\Store\Oracle\Exception\InsufficientPrivileges.cs" />
     <Compile Include="App\QueryException\InvalidIdentifier.cs" />
     <Compile Include="App\QueryException\InvalidPassword.cs" />
     <Compile Include="Data\Query\Exception\QueryException.cs" />
@@ -159,7 +159,7 @@
     <Compile Include="Model\ForeignKey.cs" />
     <Compile Include="Model\GroupOperator.cs" />
     <Compile Include="Model\Interface\IQueryResult.cs" />
-    <Compile Include="Data\Store\Adapter\IAdapter.cs" />
+    <Compile Include="Data\Store\Adapter.cs" />
     <Compile Include="Model\Interface\IDataHandler.cs" />
     <Compile Include="Model\Interface\IModel.cs" />
     <Compile Include="Model\IntegerField.cs" />
@@ -179,10 +179,9 @@
     <Compile Include="Model\Query\Path.cs" />
     <Compile Include="Model\TimeStampField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\Configuration.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Server\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

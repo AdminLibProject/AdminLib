@@ -17,8 +17,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using db = AdminLib.Data.Query;
 
-namespace AdminLib.Http
-{
+namespace AdminLib.Http{
     public abstract class BaseController : ApiController {
 
         /******************** Attributes ********************/

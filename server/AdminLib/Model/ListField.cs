@@ -20,14 +20,14 @@ namespace AdminLib.Model {
         ///     that link back to us. If there is more than one foreign key, then an exception will be raised.
         ///             
         /// </summary>
-        /// <param name="apiName">  API name of the field.</param>
+        /// <param name="storeName">  API name of the field.</param>
         /// <param name="apiGroup"> API name of the group</param>
         /// <param name="refField">Complete API name of the field in the referenced model. </param>
-        public ListField ( string apiName  = null
-                         , string apiGroup = null
-                         , string refField = null)
+        public ListField ( string storeName = null
+                         , string apiGroup  = null
+                         , string refField  = null)
         {
-            this.field = new Field.ListField ( apiName   : apiName
+            this.field = new Field.ListField ( apiName   : storeName
                                              , apiGroup  : apiGroup
                                              , refColumn : refField);
         }

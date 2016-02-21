@@ -6,8 +6,7 @@ using System.Web;
 using System.Data;
 using System.Reflection;
 
-
-namespace AdminLib.Data.Store.Adapter.Oracle {
+namespace AdminLib.Data.Store.Oracle {
     public class Cursor<QueryStructure> : AdminLib.Data.Query.Cursor<QueryStructure>
         where QueryStructure : new() {
 

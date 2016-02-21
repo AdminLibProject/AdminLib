@@ -13,12 +13,12 @@ namespace AdminLib.Model {
         public Field.ForeignKey field { get; private set; }
 
         /******************** Constructors ********************/
-        public ForeignKey ( string dbColumn
+        public ForeignKey ( string storeName
                           , string apiName      = null
                           , string apiGroup     = null
                           , bool   primaryKey   = false)
         {
-            this.field = new Field.ForeignKey ( dbColumn     : dbColumn
+            this.field = new Field.ForeignKey ( dbColumn     : storeName
                                               , apiName      : apiName
                                               , apiGroup     : apiGroup
                                               , primaryKey   : primaryKey

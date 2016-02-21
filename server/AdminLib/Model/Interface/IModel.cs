@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using AdminLib.Data.Query;
 
-namespace AdminLib.Data.Store.Adapter {
+namespace AdminLib.Data.Store {
     public interface IModel {
 
         void Add<Model>   (Connection connection, Model item, string path=null);

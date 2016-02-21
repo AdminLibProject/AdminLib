@@ -13,13 +13,13 @@ namespace AdminLib.Model {
         public Field.DateTimeField field { get; private set; }
 
         /******************** Constructors ********************/
-        public DateTimeField ( string dbColumn
+        public DateTimeField ( string storeName
                              , string apiName      = null
                              , string apiGroup     = null
                              , bool   primaryKey   = false)
         {
 
-            this.field = new Field.DateTimeField ( dbColumn     : dbColumn
+            this.field = new Field.DateTimeField ( dbColumn     : storeName
                                                  , apiName      : apiName
                                                  , apiGroup     : apiGroup
                                                  , primaryKey   : primaryKey

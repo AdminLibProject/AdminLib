@@ -3,54 +3,43 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using AdminLib.Data.Query;
-using AdminLib.Data.Store.Adapter.Oracle.Exception;
+using AdminLib.Data.Store.Oracle.Exception;
 
-namespace AdminLib.Data.Store.Adapter.Oracle {
+namespace AdminLib.Data.Store.Oracle {
+
+    [AdapterDeclaration("AdminLib.Data.Store.Oracle")]
     public class Adapter : SQLAdapter {
 
-        /******************** Static Attributes ********************/
-        public  static Connection           serverConnection { get; private set; }
-        public  static List<Connection>     connections = new List<Connection>();
-        public  static AdapterConfiguration defaultConfiguration;
-
         /******************** Attributes ********************/
-        public  bool                 autoCommit { get; private set; }
-        private bool                 closeASAP    = false;
-        public  AdapterConfiguration configuration { get; private set; }
-        private Connection           connection;
-        public  Debug.Connection     debug { get; private set; }
-        public  string               id    { get; private set; }
-        private OracleConnection     oracleConnection;
-        private List<BaseCursor>     openedCursors = new List<BaseCursor>();
-        public  int                  uid {get; private set; }
+        private bool             closeASAP    = false;
+        public  Configuration    configuration { get; private set; }
+        public  Debug.Connection debug { get; private set; }
+        public  string           id    { get; private set; }
+        private OracleConnection oracleConnection;
+        private List<BaseCursor> openedCursors = new List<BaseCursor>();
+        public  int              uid {get; private set; }
 
         public  override ConnectionState state {
-
             get {
                 return this.oracleConnection.State;
             }
-
         }
 
         private OracleTransaction   transaction;
+
+        /******************** Constructor ********************/
+        public Adapter ( AdapterConfiguration configuration
+                       , bool                 autoCommit) : base ( configuration
+                                                                 , autoCommit) {}
+
+        public Adapter ( string     configuration
+                       , bool       autoCommit) : base ( configuration
+                                                       , autoCommit) {}
 
         /******************** Structures ********************/
         private struct FunctionResult {
             public string STRING_VALUE {get; set;}
             public int    INT_VALUE    {get; set;}
-        }
-
-        /******************** Constructors ********************/
-        public Adapter ( Connection connection
-                       , bool       autoCommit = true) {
-
-            this.autoCommit       = autoCommit;
-            this.connection       = connection;
-            this.oracleConnection = Adapter.GetNewOracleConnection();
-
-            if (!this.autoCommit)
-                this.transaction = this.oracleConnection.BeginTransaction();
-
         }
 
         /******************** Static Methods ********************/
@@ -422,6 +411,13 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
             this.transaction = this.oracleConnection.BeginTransaction();
         }
 
+        protected override void Initialize(AdapterConfiguration configuration) {
+            this.oracleConnection = Adapter.GetNewOracleConnection();
+
+            if (!this.autoCommit)
+                this.transaction = this.oracleConnection.BeginTransaction();
+        }
+
         public override void UnregisterCursor(BaseCursor cursor) {
             this.openedCursors.Remove(cursor);
 
@@ -438,7 +434,6 @@ namespace AdminLib.Data.Store.Adapter.Oracle {
         /// </summary>
         /// <typeparam name="Row">Return type of each row</typeparam>
         /// <param name="sqlQuery">Query to execute</param>
-        /// <param name="connection">Connection to use for execution</param>
         /// <param name="parameters">Parameters of the query</param>
         /// <returns></returns>
         public override DataTable QueryDataTable ( string           sqlQuery

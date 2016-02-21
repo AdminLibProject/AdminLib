@@ -3,7 +3,7 @@ using AdminLib.Data.Query;
 using AdminLib.Data.Query.Exception;
 using System.Data.Common;
 
-namespace AdminLib.Data.Store.Adapter.Oracle.Exception
+namespace AdminLib.Data.Store.Oracle.Exception
 {
 
     public class AdapterException : QueryException    {

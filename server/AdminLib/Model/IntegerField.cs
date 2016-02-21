@@ -13,14 +13,14 @@ namespace AdminLib.Model {
         public Field.IntegerField field { get; private set; }
 
         /******************** Constructors ********************/
-        public IntegerField ( string dbColumn
+        public IntegerField ( string storeName
                             , string apiName      = null
                             , string apiGroup     = null
                             , string sequence     = null
                             , bool   primaryKey   = false)
         {
 
-            this.field = new Field.IntegerField ( dbColumn     : dbColumn
+            this.field = new Field.IntegerField ( dbColumn     : storeName
                                                 , apiName      : apiName
                                                 , apiGroup     : apiGroup
                                                 , primaryKey   : primaryKey

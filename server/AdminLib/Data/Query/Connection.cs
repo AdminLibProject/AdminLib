@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Store;
 using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 
@@ -13,10 +13,9 @@ namespace AdminLib.Data.Query {
         private static int              lastID = 0;
         public  static Connection       serverConnection { get; private set; }
         public  static List<Connection> connections = new List<Connection>();
-        private static IAdapterManager  defaultAdapterManager;
-
+         
         /******************** Attributes ********************/
-        private IAdapter            adapter;
+        private Adapter             adapter;
 
         public  bool                autoCommit { get; private set; }
         public  Debug.Connection    debug      { get; private set; }
@@ -24,47 +23,18 @@ namespace AdminLib.Data.Query {
         public ConnectionState      state      { get; private set; }
 
         /******************** Constructors ********************/
-        public Connection ( bool autoCommit  = true) {
+        public Connection ( string configuration = null
+                          , string manager       = null
+                          , bool   autoCommit    = true) {
 
-            // Initialize connection
-            if (Connection.defaultAdapterManager == null)
-                throw new System.Exception("No default adapter manager defined");
+            this.adapter = Adapter.GetAdapter ( configuration : configuration
+                                              , autoCommit    : true);
 
-            this.adapter = Connection.defaultAdapterManager.GetNewAdapter(autoCommit : autoCommit);
-
-            this.Initialize(autoCommit);
-        }
-
-        public Connection ( IAdapterManager adapterManager
-                          , bool            autoCommit = true) {
-
-            // Initialize adapter
-            this.adapter = adapterManager.GetNewAdapter(autoCommit : autoCommit);
-
-            this.Initialize(autoCommit);
-        }
-
-        public Connection (IAdapter adapter) {
-            this.adapter = adapter;
-
-            this.Initialize(autoCommit);
-        }
-
-        private void Initialize(bool autoCommit) {
-
-            this.autoCommit = autoCommit;
             this.uid        = Connection.lastID++;
             this.state      = ConnectionState.Connecting;
             this.debug      = new Debug.Connection(this);
 
             Connection.connections.Add(this);
-        }
-
-        /******************** Classes & structures ********************/
-        public struct FunctionResult {
-
-            public string STRING_VALUE;
-
         }
 
         /******************** Static Methods ********************/
@@ -370,7 +340,6 @@ namespace AdminLib.Data.Query {
         /// Rollback the transaction.
         /// </summary>
         public void Rollback() {
-
             this.adapter.Rollback();
         }
 
@@ -388,56 +357,9 @@ namespace AdminLib.Data.Query {
                                 , bool?            bindByName = null)
             where Row: new() {
 
-            object            instance;
-            int               nbRows;
-            PropertyInfo      property;
-            DataTable         queryTable;
-            Row[]             results;
-            DataRow           row;
-            Type              typeInt;
-            Type              typeIntNullable;
-            Type              typeT;
-
-            queryTable = this.QueryDataTable ( query      : query
-                                             , parameters : parameters
-                                             , bindByName : bindByName);
-
-            nbRows = queryTable.Rows.Count;
-
-            // Building the array of result type
-            results = new Row[nbRows];
-
-            typeT           = typeof(Row);
-            typeInt         = typeof(int);
-            typeIntNullable = typeof(int?);
-
-            // Populating the result array
-            for(int q=0; q < nbRows; q++) {
-
-                row = queryTable.Rows[q];
-
-                instance = new Row();
-
-                foreach(DataColumn column in queryTable.Columns) {
-                    property = typeT.GetProperty(column.ColumnName);
-
-                    if (row[column] is System.DBNull)
-                        continue;
-
-                    if (row[column] is System.Decimal && property.PropertyType == typeInt)
-                        property.SetValue(instance, Convert.ToInt32(row[column]), null);
-
-                    else if (row[column] is System.Decimal && property.PropertyType == typeIntNullable)
-                        property.SetValue(instance, row[column] == null ? (int?) null : Convert.ToInt32(row[column]), null);
-
-                    else
-                        property.SetValue(instance, row[column], null);
-                }
-
-                results[q] = (Row) instance;
-            }
-
-            return results;
+            return this.adapter.Query<Row> ( query      : query
+                                           , parameters : parameters
+                                           , bindByName : bindByName);
         }
 
         /// <summary>

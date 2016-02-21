@@ -13,13 +13,13 @@ namespace AdminLib.Model {
         public Field.CharField field { get; private set; }
 
         /******************** Constructors ********************/
-        public CharField ( string   dbColumn
+        public CharField ( string   storeName
                          , string   apiName      = null
                          , string   apiGroup     = null
                          , int      max_length   = -1
                          , bool     primaryKey   = false)
         {
-            this.field = new Field.CharField ( dbColumn     : dbColumn
+            this.field = new Field.CharField ( dbColumn     : storeName
                                              , apiName      : apiName
                                              , apiGroup     : apiGroup
                                              , max_length   : max_length < 0 ? null : (int?) max_length

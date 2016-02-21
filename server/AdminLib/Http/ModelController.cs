@@ -4,7 +4,7 @@ using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using AdminLib.Model;
 using db = AdminLib.Data.Query;
-using AdminLib.Data.Store.Adapter;
+using AdminLib.Data.Store;
 using AdminLib.Model.Interface;
 using AdminLib.Data.Query.Exception;
 

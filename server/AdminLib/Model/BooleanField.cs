@@ -13,13 +13,13 @@ namespace AdminLib.Model {
         public Field.BooleanField field { get; private set; }
 
         /******************** Constructors ********************/
-        public BooleanField ( string dbColumn
+        public BooleanField ( string storeName
                             , string apiName      = null
                             , string apiGroup     = null
                             , bool   primaryKey   = false)
         {
 
-            this.field = new Field.BooleanField ( dbColumn     : dbColumn
+            this.field = new Field.BooleanField ( dbColumn     : storeName
                                                 , apiName      : apiName
                                                 , apiGroup     : apiGroup
                                                 , primaryKey   : primaryKey
