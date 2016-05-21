@@ -41,6 +41,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.2400\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
       <Private>True</Private>
@@ -93,6 +97,7 @@
     <Compile Include="Data\Query\Exception\UniqueConstraintViolated.cs" />
     <Compile Include="Data\Store\AdapterConfiguration.cs" />
     <Compile Include="Data\Store\AdapterDeclaration.cs" />
+    <Compile Include="Data\Store\Oracle\Creator.cs" />
     <Compile Include="Data\Store\Oracle\Exception\AdapterException.cs" />
     <Compile Include="Data\Store\Oracle\Exception\SuccessWithCompilationError.cs" />
     <Compile Include="Data\Query\QueryParameter.cs" />

@@ -11,7 +11,7 @@ namespace AdminLib.Data.Store {
     public abstract class Adapter {
 
         /******************** Attrributes & Fields ********************/
-        public    bool       autoCommit { get; private set; }
+        protected AdapterConfiguration adapterConfiguration;
 
         /******************** Static Attrributes & Fields ********************/
         private static Dictionary<string, ICreator> adapterCreators = new Dictionary<string, ICreator>();
@@ -47,18 +47,17 @@ namespace AdminLib.Data.Store {
         }
 
         /******************** Constructors ********************/
-        public Adapter ( AdapterConfiguration configuration
-                       , bool                 autoCommit) {
-            this.Initialize(configuration);
-            this.autoCommit = autoCommit;
+        public Adapter (AdapterConfiguration configuration) {
+            this.adapterConfiguration = configuration;
+            this.Initialize();
         }
 
-        public Adapter ( string     configuration
-                       , bool       autoCommit) {
+        public Adapter (string configuration) {
             AdapterConfiguration adapterConfiguration;
             adapterConfiguration = AdapterConfiguration.GetAdapterConfiguration(configuration);
-            this.Initialize(adapterConfiguration);
-            this.autoCommit = autoCommit;
+
+            this.adapterConfiguration = adapterConfiguration;
+            this.Initialize();
         }
 
         /******************** Static Methods ********************/
@@ -70,7 +69,7 @@ namespace AdminLib.Data.Store {
         }
 
         public static Adapter GetAdapter ( bool   autoCommit
-                                         , string configuration) {
+                                         , string configuration)  {
 
             Adapter              adapter;
             AdapterConfiguration adapterConfiguration;
@@ -88,7 +87,7 @@ namespace AdminLib.Data.Store {
 
         /******************** Methods ********************/
 
-        protected abstract void Initialize(AdapterConfiguration configuration);
+        protected abstract void Initialize();
 
         // TODO : remove default parameter values : this interface is not meant to be used by "final" users.
 
@@ -109,7 +108,7 @@ namespace AdminLib.Data.Store {
         /// <summary>
         /// Close the connection.
         /// 
-        /// The closing MUST fail if there is remaining curors opened.
+        /// The closing will fail if there is remaining curors opened.
         /// 
         /// </summary>
         /// <param name="force">

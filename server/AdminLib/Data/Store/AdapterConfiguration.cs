@@ -10,9 +10,22 @@ namespace AdminLib.Data.Store {
         /******************** Static Attributes ********************/
         internal static Dictionary<string, AdapterConfiguration> configurations = new Dictionary<string, AdapterConfiguration>();
 
-        /******************** Attributes ********************/
+        /******************** Attributes & Fields ********************/
         public   string           name           {get; }
+
+        /// <summary>
+        ///     Object that will create a new adapter.
+        /// </summary>
         internal Adapter.ICreator adapterCreator;
+
+        /// <summary>
+        /// Indicate if the autocommit
+        /// </summary>
+        public virtual bool autoCommit {
+            get {
+                return false;
+            }
+        }
 
         /******************** Classes & Structures ********************/
         [AttributeUsage ( AttributeTargets.Class

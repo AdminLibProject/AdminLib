@@ -27,14 +27,13 @@ namespace AdminLib.Data.Store.Oracle {
 
         private OracleTransaction   transaction;
 
-        /******************** Constructor ********************/
-        public Adapter ( AdapterConfiguration configuration
-                       , bool                 autoCommit) : base ( configuration
-                                                                 , autoCommit) {}
+        /******************** Static Attributes ********************/
+        private static Creator creator;
 
-        public Adapter ( string     configuration
-                       , bool       autoCommit) : base ( configuration
-                                                       , autoCommit) {}
+        /******************** Constructor ********************/
+        public Adapter ( AdapterConfiguration configuration ) : base ( configuration) {}
+
+        public Adapter ( string configuration) : base ( configuration) {}
 
         /******************** Structures ********************/
         private struct FunctionResult {
@@ -43,6 +42,20 @@ namespace AdminLib.Data.Store.Oracle {
         }
 
         /******************** Static Methods ********************/
+
+        public static void Declare() {
+            Creator creator;
+
+            if (Adapter.creator == null)
+                throw new System.Exception("Already declared");
+
+            creator = new Creator("AdminLib.Data.Store.Oracle");
+
+            Adapter.creator = creator;
+
+            Adapter.DeclareAdapter(creator : creator);
+        }
+
         /// <summary>
         ///     Create a new oracle connection using the default configuration
         /// </summary>
@@ -131,7 +144,7 @@ namespace AdminLib.Data.Store.Oracle {
             this.closeASAP = true;
 
             // Commiting transactions only if asked or if auto commit is enabled
-            if (commitTransactions == true || (commitTransactions == null && this.autoCommit))
+            if (commitTransactions == true || (commitTransactions == null && this.adapterConfiguration.autoCommit))
                 this.Commit();
             else
                 this.Rollback();
@@ -145,7 +158,7 @@ namespace AdminLib.Data.Store.Oracle {
         /// </summary>
         /// <param name="condition"></param>
         private void Commit(bool? condition) {
-            if (condition == true || (condition == null && this.autoCommit))
+            if (condition == true || (condition == null && this.adapterConfiguration.autoCommit))
                 this.Commit();
         }
 
@@ -411,10 +424,10 @@ namespace AdminLib.Data.Store.Oracle {
             this.transaction = this.oracleConnection.BeginTransaction();
         }
 
-        protected override void Initialize(AdapterConfiguration configuration) {
+        protected override void Initialize() {
             this.oracleConnection = Adapter.GetNewOracleConnection();
 
-            if (!this.autoCommit)
+            if (!this.adapterConfiguration.autoCommit)
                 this.transaction = this.oracleConnection.BeginTransaction();
         }
 

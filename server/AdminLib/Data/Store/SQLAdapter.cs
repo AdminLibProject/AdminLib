@@ -14,13 +14,9 @@ namespace AdminLib.Data.Store {
         public abstract ConnectionState state { get; }
 
         /******************** Constructor ********************/
-        public SQLAdapter ( AdapterConfiguration configuration
-                          , bool                 autoCommit) : base ( configuration
-                                                                    , autoCommit) {}
+        public SQLAdapter ( AdapterConfiguration configuration) : base ( configuration ) {}
 
-        public SQLAdapter ( string     configuration
-                          , bool       autoCommit) : base ( configuration
-                                                          , autoCommit) {}
+        public SQLAdapter ( string configuration ) : base ( configuration ) {}
 
         /******************** Methods ********************/
 
