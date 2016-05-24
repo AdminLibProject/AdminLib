@@ -1,9 +1,0 @@
-
-/**
- * @name AdminLib.widget.Modal.Parameters
- * @typedef {Object}
- * @property {AdminLib.element.Button.Parameter[]} buttons
- * @property {DOMElement}                         message
- * @property {string}                             title
- *
- */
