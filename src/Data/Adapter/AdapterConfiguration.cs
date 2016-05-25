@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Xml.XPath;
 
-namespace AdminLib.Data.Store {
+namespace AdminLib.Data.Adapter {
     public abstract class AdapterConfiguration {
         
         /******************** Static Attributes ********************/
@@ -43,7 +43,7 @@ namespace AdminLib.Data.Store {
         }
 
         /******************** Constructors ********************/
-        internal AdapterConfiguration ( XPathNavigator storeConfiguration) {
+        protected AdapterConfiguration ( XPathNavigator storeConfiguration) {
 
             string               adapter;
             string               name;

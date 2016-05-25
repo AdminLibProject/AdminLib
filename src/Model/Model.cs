@@ -1,7 +1,7 @@
 ﻿using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using System;
-using AdminLib.Data.Store;
+using AdminLib.Data.Adapter;
 using AdminLib.Model.Interface;
 using AdminLib.Data.Query;
 

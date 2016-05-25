@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using AdminLib.Data.Store;
+using AdminLib.Data.Adapter;
 using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 
@@ -15,7 +15,7 @@ namespace AdminLib.Data.Query {
         public  static List<Connection> connections = new List<Connection>();
          
         /******************** Attributes ********************/
-        private Adapter             adapter;
+        private Adapter.Adapter             adapter;
 
         public  bool                autoCommit { get; private set; }
         public  Debug.Connection    debug      { get; private set; }
@@ -27,7 +27,7 @@ namespace AdminLib.Data.Query {
                           , string manager       = null
                           , bool   autoCommit    = true) {
 
-            this.adapter = Adapter.GetAdapter ( configuration : configuration
+            this.adapter = Adapter.Adapter.GetAdapter ( configuration : configuration
                                               , autoCommit    : true);
 
             this.uid        = Connection.lastID++;

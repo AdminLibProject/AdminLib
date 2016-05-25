@@ -6,7 +6,7 @@ using System.Reflection;
 using System;
 using System.Collections.Generic;
 
-namespace AdminLib.Data.Store {
+namespace AdminLib.Data.Adapter {
 
     public abstract class Adapter {
 

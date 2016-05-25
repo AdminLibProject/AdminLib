@@ -7,7 +7,7 @@ using AdminLib.Model.Query;
 using AdminLib.Model;
 using Field = AdminLib.Model.Field;
 
-namespace AdminLib.Data.Store {
+namespace AdminLib.Data.Adapter {
 
     using System.Data;
     using System.Collections;

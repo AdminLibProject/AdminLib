@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using store=AdminLib.Data.Store;
+using store=AdminLib.Data.Adapter;
 using System.Collections.ObjectModel;
 using System.Xml.XPath;
-using AdminLib.Data.Store;
+using AdminLib.Data.Adapter;
 
 namespace AdminLib.Server {
     internal static class Configuration {
