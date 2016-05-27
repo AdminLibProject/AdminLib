@@ -3,12 +3,12 @@ using System.Net.Http;
 using AdminLib.Model.Model;
 using AdminLib.Model.Query;
 using AdminLib.Model;
-using db = AdminLib.Data.Query;
 using AdminLib.Data.Adapter;
 using AdminLib.Model.Interface;
 using AdminLib.Data.Query.Exception;
 
-namespace AdminLib.Http {
+namespace AdminLib.Http
+{
 
     public class ModelController<Model> : BaseController
         where Model: IModel, IQueryResult, new() {
