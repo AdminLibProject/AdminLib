@@ -6,7 +6,7 @@ using AdminLib.Model.Interface;
 using AdminLib.Data.Query;
 
 namespace AdminLib.Model {
-    public abstract class Model<Self> : IQueryResult
+    public abstract class Model<Self> : IQueryResult, IModel
         where Self : Model<Self> {
 
         /******************** Static attributes ********************/
